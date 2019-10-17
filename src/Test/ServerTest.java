@@ -56,15 +56,30 @@ public class ServerTest {
                         User u = new User(_id, false, 1111);
                         userList.add(u);
                     }
-                    
+                    for(User m:userList) System.out.println("userID : " + m._id + "---" + m.active+ "----" + m.portClient);
                 } catch (Exception e) {
                     System.out.println("can not connect to database");
                 }
     }
     
+    //enable - disable Active
+    public static void checkActive(String id){
+        int i = -1;
+        for(User m : userList){
+            i++;
+            if(m._id.toString().equals(id)) {
+                userList.get(i).active = !userList.get(i).active;
+            }
+        }
+        
+        for(User m:userList) System.out.println("userID : " + m._id + "---" + m.active + "----" + m.portClient);
+        
+    }
+    
     
     public static void main(String[] args) {
         getUserlist();
+        //checkActive("5da83b4a759bc816704d09cc");
         
         new Thread(new Runnable() {
             @Override
@@ -116,27 +131,40 @@ public class ServerTest {
                         Socket p = null;
                         p = sscontroll.accept();
                         ssc_ctrl.add(p);
-                        System.out.println("Clients nomber : " + ssc_ctrl.size());
+                        System.out.println("Active clients nomber : " + ssc_ctrl.size());
                         
-                        
+                        System.out.println("");
                         InputStream inputStream = p.getInputStream();
                         DataInputStream dataInputStream = new DataInputStream(inputStream);
                         String message = dataInputStream.readUTF();
-                        System.out.println("The message : " + message);
+                        System.out.println("Client Actions : " + message);
+                       
+                        if(message.toString().substring(0, 3).equals("con")){
+                            checkActive(message.toString().substring(3, message.length()));  
+                        }
+                        if(message.toString().substring(0, 3).equals("rig")){
+                            OutputStream outputStream = p.getOutputStream();
+                            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+                            System.out.println("Sending string to the Client");
+                            dataOutputStream.writeUTF(message + " from server");
+                            dataOutputStream.flush(); // send the message
+                        }
+                            
+
                         
-            
+                        
                         
                         OutputStream outputStream = p.getOutputStream();
                         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                         System.out.println("Sending string to the Client");
                         dataOutputStream.writeUTF("Hello from Server");
                         dataOutputStream.flush(); // send the message
-                        
-                        Scanner sc = new Scanner(System.in);
-                        String i = sc.nextLine();
-                        
-                        dataOutputStream.writeUTF(i);
-                        dataOutputStream.flush();
+//                        
+//                        Scanner sc = new Scanner(System.in);
+//                        String i = sc.nextLine();
+//                        
+//                        dataOutputStream.writeUTF(i);
+//                        dataOutputStream.flush();
                     }
                     
                     
