@@ -71,11 +71,13 @@ public class ServerTest {
                 userList.get(i).active = !userList.get(i).active;
             }
         }
-        
         for(User m:userList) System.out.println("userID : " + m._id + "---" + m.active + "----" + m.portClient);
-        
     }
     
+    
+    public static void sendMessageToClient(String Mess){
+        
+    }
     
     public static void main(String[] args) {
         getUserlist();
@@ -85,7 +87,6 @@ public class ServerTest {
             @Override
             public void run()
             {
-                
                 Socket scc=null;
                 Socket scc1=null;
                 OutputStream os1=null,os2=null;
