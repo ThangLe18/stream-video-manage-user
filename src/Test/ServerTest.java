@@ -160,6 +160,8 @@ public class ServerTest {
                         System.out.println("Sending string to the Client");
                         dataOutputStream.writeUTF("Hello from Server");
                         dataOutputStream.flush(); // send the message
+                        for(int i=0;i<ssc_ctrl.size();i++)
+                           System.out.println(ssc_ctrl.get(i).toString() + "---" + i);
 //                        
 //                        Scanner sc = new Scanner(System.in);
 //                        String i = sc.nextLine();

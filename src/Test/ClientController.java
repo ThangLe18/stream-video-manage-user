@@ -42,19 +42,24 @@ public class ClientController extends Application{
     public static Socket scc;
     public static String _id;
     public static String _id_call;
+    public static OutputStream outputStream;
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        scc=new Socket("localhost",6666);
+        outputStream = scc.getOutputStream();
         launch(args);
     }
     
     public static void connectServer(String id) throws IOException{
-        scc=new Socket("localhost",6666);
-        OutputStream outputStream = scc.getOutputStream();
+        
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         System.out.println("Sending string to the ServerSocket");
         dataOutputStream.writeUTF("con"+id);
         dataOutputStream.flush(); // send the message
         //dataOutputStream.close(); 
+        
+        dataOutputStream.writeUTF("test con");
+        dataOutputStream.flush(); // send the message
         
     }
     
