@@ -58,7 +58,7 @@ public class Server {
                              MessagePackage m = (MessagePackage) objectInputStream.readObject();
                              System.out.println("messages:" + m.getDestUid()+"---" + m.getSrcUid());
                              if(m.getSrcUid().equals("forward")) {
-                                 for(int h=0;h<19;h++){
+                                 for(int h=0;h<5;h++){
                                      System.out.println("Send again to client");
                                      objectOutputStream.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"IamServer","IamServer"));
                                      Thread.sleep(2000);
