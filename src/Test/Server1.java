@@ -26,12 +26,10 @@ public class Server1 {
             System.out.println("ServerSocket awaiting connections...");
             socket[socketnumber] = ss.accept(); 
             System.out.println("\nConnection from " + socket + "!");
-
             InputStream inputStream = socket[socketnumber].getInputStream();
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             
                  
-            
             new Thread(new Runnable() {
                 @Override
                 public void run()
@@ -40,15 +38,12 @@ public class Server1 {
                          try {
                              Message listOfMessages = (Message) objectInputStream.readObject();
                              System.out.println("messages:" + listOfMessages.getText()); 
-                         } catch (IOException ex) {
-                             //Logger.getLogger(Server1.class.getName()).log(Level.SEVERE, null, ex);
-                         } catch (ClassNotFoundException ex) {
-                             //Logger.getLogger(Server1.class.getName()).log(Level.SEVERE, null, ex);
-                         }
+                         } 
+                         catch (IOException ex) {} 
+                         catch (ClassNotFoundException ex) {}
                      }
                 }
             }).start();
-
     }}
 }
 
