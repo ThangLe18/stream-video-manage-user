@@ -57,6 +57,7 @@ public class VideoClientFXWebcam extends Application {
 
         System.out.println("Connecting to server...");
         Socket scc=new Socket("localhost",7777);
+        System.out.println("client port : "+scc);
         InputStream is=scc.getInputStream();
         OutputStream os=scc.getOutputStream();
         System.out.println("Connected to server, start playing...");

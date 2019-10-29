@@ -49,12 +49,12 @@ public class Client {
                 {
                      while(true){
                          try {
+                             System.out.println(".");
                              MessagePackage m = (MessagePackage) objectInputStream.readObject();
                              System.out.println("messages from Server:" + m.getDestUid()+"---" + m.getSrcUid());
                          } 
-                         catch (IOException ex) {} 
-                         catch (ClassNotFoundException ex) {
-                         }
+                         catch (IOException ex) {System.out.println(ex);} 
+                         catch (ClassNotFoundException ex) {System.out.println(ex);}
                      }
                 }
             }).start();   

@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 public class Server {
     public ServerSocket ss;
     public Socket[] socket;
+    public OutputStream[] outputStreamList;
+    public ObjectOutputStream[] objectOutputStreamList;
     public OutputStream outputStream;
     public ObjectOutputStream objectOutputStream;
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -38,17 +40,31 @@ public class Server {
     
     
     public void listenFromClient() throws IOException{
+        outputStreamList = new OutputStream[100];
+        objectOutputStreamList = new ObjectOutputStream[100];
         socket = new Socket[100];
         int socketnumber = -1;
+        Socket p = null;
         while(true){
             socketnumber++;
             System.out.println("ServerSocket awaiting connections...");
-            socket[socketnumber] = ss.accept(); 
-            System.out.println("\nConnection from " + socket + "!");
+            socket[socketnumber] = ss.accept();
+            System.out.println("\nConnection from " + socket[socketnumber] + "!");
             InputStream inputStream = socket[socketnumber].getInputStream();
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            OutputStream outputStream = socket[socketnumber].getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+
+            if(socketnumber > -1){
+                System.out.println("sending to client");
+                outputStreamList[socketnumber] = socket[socketnumber].getOutputStream();
+                objectOutputStreamList[socketnumber] = new ObjectOutputStream(outputStreamList[socketnumber]);
+                objectOutputStreamList[socketnumber].writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"=0","IamServer"));
+            }
+          
+            objectOutputStreamList[0].writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"test","IamServer"));
+            
+
+            
             new Thread(new Runnable() {
                 @Override
                 public void run()
@@ -57,17 +73,17 @@ public class Server {
                          try {
                              MessagePackage m = (MessagePackage) objectInputStream.readObject();
                              System.out.println("messages:" + m.getDestUid()+"---" + m.getSrcUid());
-                             if(m.getSrcUid().equals("forward")) {
-                                 for(int h=0;h<5;h++){
-                                     System.out.println("Send again to client");
-                                     objectOutputStream.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"IamServer","IamServer"));
-                                     Thread.sleep(2000);
-                                 }
-                                 }
+//                             if(m.getSrcUid().equals("forward")) {
+//                                 for(int h=0;h<5;h++){
+//                                     System.out.println("Send again to client");
+//                                     objectOutputStream.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"IamServer","IamServer"));
+//                                     Thread.sleep(2000);
+//                                 }
+//                                 }
                          } 
-                         catch (IOException ex) {} 
-                         catch (ClassNotFoundException ex) {} catch (InterruptedException ex) {
-                         }
+                         catch (IOException ex) {} catch (ClassNotFoundException ex) { 
+                             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                         } 
                      }
                 }
             }).start();   

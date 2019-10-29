@@ -29,6 +29,7 @@ public class KioskVideoServerPacket {
             ss=new ServerSocket(7777);
             System.out.println("Waiting for first client...");
             scc=ss.accept();
+            System.out.println("client socket : " + scc);
             System.out.println("Client 1 is just connected! waiting for client 2...");
             scc1=ss.accept();
             System.out.println("Client 2 is just connected! Streaming...");
