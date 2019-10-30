@@ -13,19 +13,31 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class Server {
+    
     public ServerSocket ss;
     public Socket[] socket;
+    public int socketnumber = -1;
     public OutputStream[] outputStreamList;
     public ObjectOutputStream[] objectOutputStreamList;
     public OutputStream outputStream;
     public ObjectOutputStream objectOutputStream;
+    public static ArrayList<UserData> userData = new ArrayList<>();
+    public ArrayList<UserState> listUserState = new ArrayList<>();
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+        //login information
+        userData.add(new UserData("12347162", "Mickey js","a", "1"));
+        userData.add(new UserData("12341527", "Rancix ft","b", "1"));
+        userData.add(new UserData("66211343", "Aslhycole","c", "1"));
+        userData.add(new UserData("42211455", "Michel Owen","d", "1"));
+        userData.add(new UserData("55223114", "Frank lampard","e", "1"));
+        
         Server server = new Server();
         server.createServerSocket();
         server.listenFromClient();
@@ -43,7 +55,7 @@ public class Server {
         outputStreamList = new OutputStream[100];
         objectOutputStreamList = new ObjectOutputStream[100];
         socket = new Socket[100];
-        int socketnumber = -1;
+        
         Socket p = null;
         while(true){
             socketnumber++;
@@ -73,18 +85,18 @@ public class Server {
                          try {
                              MessagePackage dataClient = (MessagePackage) objectInputStream.readObject();
                              System.out.println("messages:" + dataClient.getDestUid()+"---" + dataClient.getSrcUid());
+                             //System.out.println("socket test :   " + dataClient.getSocket());
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_CONNECT)
                              {
-                                 System.out.println("ok REQUEST_CALL_VIDEO" + dataClient.getHeader());
+                                 System.out.println(dataClient.getHeader());
+                                 System.out.println("source : " + dataClient.getSrcUid());
+                                 System.out.println("Port : "+dataClient.getPort());
+                                 int a = findIndexOfSocket(dataClient.getPort());
+                                 System.out.println("find port : "+a);
+                                 listUserState.add(new UserState(dataClient.getSrcUid(), findUsernameByID(dataClient.getSrcUid()), "free"));
+                                 System.out.println(listUserState.size()+findUsernameByID(dataClient.getSrcUid()));
                              }
                              
-//                             if(m.getSrcUid().equals("forward")) {
-//                                 for(int h=0;h<5;h++){
-//                                     System.out.println("Send again to client");
-//                                     objectOutputStream.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"IamServer","IamServer"));
-//                                     Thread.sleep(2000);
-//                                 }
-//                                 }
                          } 
                          catch (IOException ex) {} catch (ClassNotFoundException ex) { 
                              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,6 +107,21 @@ public class Server {
         }
     }
     
+    public String findUsernameByID(String id){
+        for(UserData u : userData){
+            if(u.userID.equals(id))
+                return u.name;
+        }
+        return "unknow";
+    }
+    
+    public int findIndexOfSocket(int port){
+        for(int i=0;i<socketnumber;i++){
+            if(socket[i].getPort() == port)
+                return i;
+        }
+        return -1;
+    }
     
     public void sendToClient(){
 

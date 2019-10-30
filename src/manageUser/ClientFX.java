@@ -6,7 +6,10 @@
 package manageUser;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,6 +38,8 @@ public class ClientFX extends Application{
     Scene scene2;   //main screen
     Scene scene;    //login screen
     ListView<String> listView;
+    UserData currentUser;
+    Client client;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
         userData.add(new UserData("12347162", "Mickey js","a", "1"));
@@ -69,6 +74,7 @@ public class ClientFX extends Application{
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 2);
         final Text actiontarget = new Text();
+        actiontarget.setStyle("-fx-text-inner-color: red;");
         grid.add(actiontarget, 1, 6);
         
         Button btn = new Button("Sign in");
@@ -76,7 +82,15 @@ public class ClientFX extends Application{
             @Override
             public void handle(ActionEvent e) {
                 UserData m = checkLogin(userTextField.getText(), pwBox.getText());
-                if(m != null) primaryStage.setScene(scene2);
+                if(m != null) {
+                    currentUser = m;
+                    primaryStage.setScene(scene2);
+                    client = new Client();
+                    try {
+                        client.connectSocket(currentUser.userID);
+                        client.listenFromServer();
+                    } catch (IOException ex) {} catch (InterruptedException ex) {}
+                }
                 else actiontarget.setText("Login failed!");
             }
         });
@@ -121,6 +135,8 @@ public class ClientFX extends Application{
         
         
         
+        
+        
         //nutton end call
         Button btn_endcall = new Button("End call");
         btn_endcall.setMinWidth(100);btn_endcall.setMaxWidth(100);
@@ -142,6 +158,7 @@ public class ClientFX extends Application{
         btn_acceptcall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                System.out.println(currentUser.name);
             }
         });
         HBox hbBtn_acceptcall = new HBox(10);
@@ -157,6 +174,8 @@ public class ClientFX extends Application{
         btn_logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                currentUser = null;
+                primaryStage.setScene(scene);
             }
         });
         HBox hbBtn_logout = new HBox(10);
@@ -172,7 +191,7 @@ public class ClientFX extends Application{
         listView.setPrefWidth(260);
         listView.setMaxWidth(260);
         listView.setPrefHeight(150);
-        GridPane.setConstraints(listView, 1, 0, 4, 5);
+        GridPane.setConstraints(listView, 1, 0, 6, 5);
         grid2.getChildren().add(listView);
     }
 

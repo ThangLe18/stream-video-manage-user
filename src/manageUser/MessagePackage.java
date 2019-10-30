@@ -2,6 +2,7 @@
 package manageUser;
 
 import java.io.Serializable;
+import java.net.Socket;
 
 
 public class MessagePackage implements Serializable {
@@ -12,9 +13,28 @@ public class MessagePackage implements Serializable {
 
     private String destUid, srcUid;
 
+    private int port;
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public MessagePackage(TypeProtocol header, String destUid, String srcUid, int port) {
+        this.header = header;
+        this.destUid = destUid;
+        this.srcUid = srcUid;
+        this.port = port;
+    }
+
+
     /**
      * @return the header
      */
+    
     public TypeProtocol getHeader() {
         return header;
     }
@@ -64,6 +84,13 @@ public class MessagePackage implements Serializable {
         this.header = header;
         this.destUid = destUid;
         this.srcUid = srcUid;
+    }
+
+    public MessagePackage(TypeProtocol header, String destUid, String srcUid, Socket s) {
+        this.header = header;
+        this.destUid = destUid;
+        this.srcUid = srcUid;
+        this.socket = s;
     }
 
     /**
