@@ -88,21 +88,25 @@ public class ClientFX extends Application{
         
         
         
-        //Main screen
+        
+        
+        //---------------------------Main screen-----------------------------//
+        
+        
+        
+        
+        
+        
         GridPane grid2 = new GridPane();
         grid2.setAlignment(Pos.CENTER);
         grid2.setHgap(10);
         grid2.setVgap(10);
         grid2.setPadding(new Insets(25, 25, 25, 25));
-        scene2 = new Scene(grid2, 1000, 1275);
+        scene2 = new Scene(grid2, 300, 275);
         
-        listView = new ListView<>();
-        listView.getItems().addAll("Action 1", "Action 2", "Action 3", "Action 4");
-        listView.setPrefWidth(260);
-        listView.setMaxWidth(260);
-        listView.setPrefHeight(150);
-        grid2.setConstraints(listView, 0, 2, 1, 1);
         
+        
+        //button call
         Button btn_call = new Button("Call");
         btn_call.setMinWidth(100);btn_call.setMaxWidth(100);
         btn_call.setOnAction(new EventHandler<ActionEvent>() {
@@ -116,6 +120,8 @@ public class ClientFX extends Application{
         grid2.add(hbBtn_call, 0, 0);
         
         
+        
+        //nutton end call
         Button btn_endcall = new Button("End call");
         btn_endcall.setMinWidth(100);btn_endcall.setMaxWidth(100);
         btn_endcall.setOnAction(new EventHandler<ActionEvent>() {
@@ -129,6 +135,8 @@ public class ClientFX extends Application{
         grid2.add(hbBtn_endcall, 0, 1);
         
         
+        
+        //button accept call
         Button btn_acceptcall = new Button("Accept call");
         btn_acceptcall.setMinWidth(100);btn_acceptcall.setMaxWidth(100);
         btn_acceptcall.setOnAction(new EventHandler<ActionEvent>() {
@@ -142,6 +150,8 @@ public class ClientFX extends Application{
         grid2.add(hbBtn_acceptcall, 0, 2);
         
         
+        
+        // button sign out
         Button btn_logout = new Button("Sign out");
         btn_logout.setMinWidth(100);btn_logout.setMaxWidth(100);
         btn_logout.setOnAction(new EventHandler<ActionEvent>() {
@@ -153,6 +163,17 @@ public class ClientFX extends Application{
         hbBtn_logout.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_logout.getChildren().add(btn_logout);
         grid2.add(hbBtn_logout, 0, 3);
+        
+        
+        
+        // List user obline
+        listView = new ListView<>();
+        listView.getItems().addAll("Action 1", "Action 2", "Action 3", "Action 4","Action 1", "Action 2", "Action 3", "Action 4");
+        listView.setPrefWidth(260);
+        listView.setMaxWidth(260);
+        listView.setPrefHeight(150);
+        GridPane.setConstraints(listView, 1, 0, 4, 5);
+        grid2.getChildren().add(listView);
     }
 
 
