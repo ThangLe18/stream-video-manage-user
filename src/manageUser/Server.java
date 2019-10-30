@@ -71,8 +71,13 @@ public class Server {
                 {
                      while(true){
                          try {
-                             MessagePackage m = (MessagePackage) objectInputStream.readObject();
-                             System.out.println("messages:" + m.getDestUid()+"---" + m.getSrcUid());
+                             MessagePackage dataClient = (MessagePackage) objectInputStream.readObject();
+                             System.out.println("messages:" + dataClient.getDestUid()+"---" + dataClient.getSrcUid());
+                             if(dataClient.getHeader()== TypeProtocol.REQUEST_CONNECT)
+                             {
+                                 System.out.println("ok REQUEST_CALL_VIDEO" + dataClient.getHeader());
+                             }
+                             
 //                             if(m.getSrcUid().equals("forward")) {
 //                                 for(int h=0;h<5;h++){
 //                                     System.out.println("Send again to client");

@@ -25,7 +25,7 @@ public class Client {
         Client client = new Client();
         client.connectSocket();
         client.listenFromServer();
-        client.sendMessage(new MessagePackage(TypeProtocol.ACCEPT_CALL_VIDEO,"saddfsfgf","621873978"));
+        client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_CALL_VIDEO,"saddfsfgf","621873978"));
         client.sendMessage(new MessagePackage(TypeProtocol.ACCEPT_CALL_VIDEO,"forward","forward"));
     }
     public void connectSocket() throws IOException, InterruptedException{
