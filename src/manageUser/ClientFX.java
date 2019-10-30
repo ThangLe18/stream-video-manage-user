@@ -41,7 +41,7 @@ public class ClientFX extends Application implements Serializable{
     Scene scene;    //login screen
     public static ListView<String> listView;
     UserData currentUser;
-    Client client;
+    public static Client client;
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
@@ -232,9 +232,7 @@ public class ClientFX extends Application implements Serializable{
                                 {
                                     if(client.isUpdateState() == true)
                                     {
-                                        //listView.refresh();
-                                        test();
-                                        System.out.println("updaue : true");
+                                        updateListUserOnline();
                                         client.setUpdateState(false);
                                         Thread.sleep(1000);
                                     }
@@ -249,14 +247,14 @@ public class ClientFX extends Application implements Serializable{
     }
 
 
-    public static void test(){
-        System.out.println("asd");
-        try {
-            listView.getItems().add("change1");
-        } catch (Exception e) {
-            System.out.println(e);
+    public static void updateListUserOnline() throws InterruptedException{
+        listView.getItems().add("");
+        Thread.sleep(1000);
+        listView.getItems().clear();
+        listView.getItems().add("----ListUserOnline----");
+        for(UserStateDataSend u2 : client.listUserStateDataSend ){
+            listView.getItems().add(u2.userName);
         }
-        
     }
     
     public static UserData checkLogin(String username,String password){
