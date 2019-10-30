@@ -39,9 +39,10 @@ import javafx.stage.Stage;
 public class ClientFX extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
-    ListView<String> listView;
+    public static ListView<String> listView;
     UserData currentUser;
     Client client;
+    boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
         userData.add(new UserData("12347162", "Mickey js","a", "1"));
@@ -91,10 +92,11 @@ public class ClientFX extends Application implements Serializable{
                     try {
                         client.connectSocket(currentUser.userID);
                         client.listenFromServer();
-                        Thread.sleep(500);
+                        Thread.sleep(1000);
                         for(UserStateDataSend ust : client.listUserStateDataSend){
                             listView.getItems().add(ust.userName);
                         }
+                        ready = true;
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
                 }
                 else actiontarget.setText("Login failed!");
@@ -220,25 +222,42 @@ public class ClientFX extends Application implements Serializable{
         
         
         new Thread(new Runnable() {
-            
                 @Override
                 public void run()
                 {
-                     while(true){
-                         
-                             //Thread.sleep(4000);
-//                             listView.getItems().add("Action 2");
-//                             listView.getItems().add("Action 3");
-//                             listView.getItems().add("Action 4");
-                             
-                        
-                       
+                        while(true){
+                            try {
+                                if(ready == false);
+                                else
+                                {
+                                    if(client.isUpdateState() == true)
+                                    {
+                                        //listView.refresh();
+                                        test();
+                                        System.out.println("updaue : true");
+                                        client.setUpdateState(false);
+                                        Thread.sleep(1000);
+                                    }
+                                }
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ClientFX.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                      }
                 }
             }).start();  
     }
 
 
+    public static void test(){
+        System.out.println("asd");
+        try {
+            listView.getItems().add("change1");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+    }
     
     public static UserData checkLogin(String username,String password){
         for(UserData u : userData){

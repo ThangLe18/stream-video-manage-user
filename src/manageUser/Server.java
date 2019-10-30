@@ -125,14 +125,14 @@ public class Server implements Serializable{
     }
     
     public void sendStateToClient() throws IOException{
-        
-    ArrayList<UserState> p = listUserState;
-       for(UserState u : listUserState)
-       {
-           System.out.println("send state to client : "+listUserState2.size());
-           u.ctr_oos.writeObject(listUserState2);
-       }
-    }
+           for(UserState u : listUserState)
+           {
+               u.ctr_oos.flush();
+               u.ctr_oos.reset();
+               System.out.println("send state to client listUserState2 : "+listUserState2.size());
+               u.ctr_oos.writeObject(listUserState2);
+           }
+        }
     
 }
 
