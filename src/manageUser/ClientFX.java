@@ -7,6 +7,7 @@ package manageUser;
 
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -90,6 +91,10 @@ public class ClientFX extends Application implements Serializable{
                     try {
                         client.connectSocket(currentUser.userID);
                         client.listenFromServer();
+                        Thread.sleep(500);
+                        for(UserStateDataSend ust : client.listUserStateDataSend){
+                            listView.getItems().add(ust.userName);
+                        }
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
                 }
                 else actiontarget.setText("Login failed!");
@@ -206,12 +211,31 @@ public class ClientFX extends Application implements Serializable{
         
         // List user obline
         listView = new ListView<>();
-        listView.getItems().addAll("Action 1", "Action 2", "Action 3", "Action 4","Action 1", "Action 2", "Action 3", "Action 4");
         listView.setPrefWidth(260);
         listView.setMaxWidth(260);
         listView.setPrefHeight(150);
         GridPane.setConstraints(listView, 1, 0, 6, 5);
         grid2.getChildren().add(listView);
+        
+        
+        
+        new Thread(new Runnable() {
+            
+                @Override
+                public void run()
+                {
+                     while(true){
+                         
+                             //Thread.sleep(4000);
+//                             listView.getItems().add("Action 2");
+//                             listView.getItems().add("Action 3");
+//                             listView.getItems().add("Action 4");
+                             
+                        
+                       
+                     }
+                }
+            }).start();  
     }
 
 

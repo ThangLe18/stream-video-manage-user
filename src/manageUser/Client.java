@@ -23,6 +23,7 @@ public class Client implements Serializable{
     public InputStream inputStream;
     public ObjectOutputStream objectOutputStream;
     public ObjectInputStream objectInputStream;
+    public ArrayList<UserStateDataSend> listUserStateDataSend = new ArrayList<>();
     public static void main(String[] args) throws IOException, InterruptedException {
         Client client = new Client();
         //client.connectSocket();
@@ -51,8 +52,8 @@ public class Client implements Serializable{
                 {
                      while(true){
                          try {
-                             List<UserStateDataSend> l = (List<UserStateDataSend>) objectInputStream.readObject();
-                             System.out.println("messages from Server:" + l.size());
+                             listUserStateDataSend = (ArrayList<UserStateDataSend>) (List<UserStateDataSend>) objectInputStream.readObject();
+                             System.out.println("messages from Server:" + listUserStateDataSend.size());
                          } 
                          catch (IOException ex) {System.out.println(ex);} 
                          catch (ClassNotFoundException ex) {System.out.println(ex);}
