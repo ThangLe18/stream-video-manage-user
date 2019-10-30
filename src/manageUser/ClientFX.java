@@ -7,6 +7,7 @@ package manageUser;
 
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +35,7 @@ import javafx.stage.Stage;
  *
  * @author ThayLe
  */
-public class ClientFX extends Application{
+public class ClientFX extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
     ListView<String> listView;
@@ -148,7 +149,7 @@ public class ClientFX extends Application{
         HBox hbBtn_endcall = new HBox(10);
         hbBtn_endcall.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_endcall.getChildren().add(btn_endcall);
-        grid2.add(hbBtn_endcall, 0, 1);
+        grid2.add(hbBtn_endcall, 0, 3);
         
         
         
@@ -168,6 +169,21 @@ public class ClientFX extends Application{
         
         
         
+        // button eject call
+        Button btn_rejectcall = new Button("Eject call");
+        btn_rejectcall.setMinWidth(100);btn_rejectcall.setMaxWidth(100);
+        btn_rejectcall.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+            }
+        });
+        HBox hbBtn_rejectcall = new HBox(10);
+        hbBtn_rejectcall.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn_rejectcall.getChildren().add(btn_rejectcall);
+        grid2.add(hbBtn_rejectcall, 0, 1);
+        
+        
+        
         // button sign out
         Button btn_logout = new Button("Sign out");
         btn_logout.setMinWidth(100);btn_logout.setMaxWidth(100);
@@ -181,7 +197,10 @@ public class ClientFX extends Application{
         HBox hbBtn_logout = new HBox(10);
         hbBtn_logout.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_logout.getChildren().add(btn_logout);
-        grid2.add(hbBtn_logout, 0, 3);
+        grid2.add(hbBtn_logout, 0, 4);
+        
+        
+        
         
         
         

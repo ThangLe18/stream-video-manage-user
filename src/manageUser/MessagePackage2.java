@@ -3,9 +3,10 @@ package manageUser;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.ArrayList;
 
 
-public class MessagePackage implements Serializable {
+public class MessagePackage2 implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -14,6 +15,20 @@ public class MessagePackage implements Serializable {
     private String destUid, srcUid;
 
     private int port;
+    
+    private ArrayList<UserState> listUserState;
+
+    public MessagePackage2(ArrayList<UserState> listUserState) {
+        this.listUserState = listUserState;
+    }
+
+    public ArrayList<UserState> getListUserState() {
+        return listUserState;
+    }
+
+    public void setListUserState(ArrayList<UserState> listUserState) {
+        this.listUserState = listUserState;
+    }
 
     public int getPort() {
         return port;
@@ -23,7 +38,7 @@ public class MessagePackage implements Serializable {
         this.port = port;
     }
 
-    public MessagePackage(TypeProtocol header, String destUid, String srcUid, int port) {
+    public MessagePackage2(TypeProtocol header, String destUid, String srcUid, int port) {
         this.header = header;
         this.destUid = destUid;
         this.srcUid = srcUid;
@@ -79,7 +94,7 @@ public class MessagePackage implements Serializable {
      * @param destUid
      * @param srcUid
      */
-    public MessagePackage(TypeProtocol header, String destUid, String srcUid) {
+    public MessagePackage2(TypeProtocol header, String destUid, String srcUid) {
         super();
         this.header = header;
         this.destUid = destUid;
@@ -91,7 +106,7 @@ public class MessagePackage implements Serializable {
     /**
      * @param header
      */
-    public MessagePackage(TypeProtocol header) {
+    public MessagePackage2(TypeProtocol header) {
         super();
         this.header = header;
     }
@@ -100,7 +115,7 @@ public class MessagePackage implements Serializable {
      * @param header
      * @param srcUid
      */
-    public MessagePackage(TypeProtocol header, String srcUid) {
+    public MessagePackage2(TypeProtocol header, String srcUid) {
         super();
         this.header = header;
         this.srcUid = srcUid;

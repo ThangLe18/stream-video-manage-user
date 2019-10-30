@@ -2,12 +2,14 @@
 package manageUser;
 
 import static Test.ClientController.outputStream;
+import TestSendObject.Message;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Client {
+public class Client implements Serializable{
     public Socket socket;
     public OutputStream outputStream;
     public InputStream inputStream;
@@ -49,9 +51,9 @@ public class Client {
                 {
                      while(true){
                          try {
-                             System.out.println(".");
-                             MessagePackage l = (MessagePackage) objectInputStream.readObject();
-                             System.out.println("messages from Server:" + l.getDestUid());
+                             List<UserStateDataSend> l = new ArrayList<>();
+                             l = (List<UserStateDataSend>) objectInputStream.readObject();
+                             System.out.println("messages from Server:" + l.size());
                          } 
                          catch (IOException ex) {System.out.println(ex);} 
                          catch (ClassNotFoundException ex) {System.out.println(ex);}

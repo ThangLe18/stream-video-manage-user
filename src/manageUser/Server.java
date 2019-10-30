@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Server {
+public class Server implements Serializable{
     
     public ServerSocket ss;
     public Socket[] socket;
@@ -30,6 +31,7 @@ public class Server {
     public ObjectOutputStream objectOutputStream;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public ArrayList<UserState> listUserState = new ArrayList<>();
+    public ArrayList<UserStateDataSend> listUserState2 = new ArrayList<>();
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         //login information
         userData.add(new UserData("12347162", "Mickey js","a", "1"));
@@ -90,9 +92,11 @@ public class Server {
                                          null,null,"free",null,
                                          new ObjectOutputStream(socket[a].getOutputStream())
                                  ));
+                                 listUserState2.add(new UserStateDataSend(dataClient.getSrcUid(), 
+                                         findUsernameByID(dataClient.getSrcUid()),"free",null
+                                 ));
+                                 System.out.println("listuserstate2 : " + listUserState2.size());
                                  sendStateToClient();
-                                 System.out.println(listUserState.size()+findUsernameByID(dataClient.getSrcUid()));
-                                 listUserState.get(0).ctr_oos.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"=0132","IamServer"));
                              }
                              
                          } 
@@ -122,11 +126,14 @@ public class Server {
     }
     
     public void sendStateToClient() throws IOException{
-       
-        for(UserState u : listUserState){
-            u.ctr_oos.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"send to all","IamServer"));
-        }
+        
+    ArrayList<UserState> p = listUserState;
+       for(UserState u : listUserState)
+            u.ctr_oos.writeObject(listUserState2);
+        
     }
+//listUserState.get(0).ctr_oos.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"=0132","IamServer"));
+
     
     public void sendToClient(){
 
