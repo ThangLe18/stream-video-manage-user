@@ -76,9 +76,9 @@ public class Server implements Serializable{
                          try {
                              MessagePackage dataClient = (MessagePackage) objectInputStream.readObject();
                              System.out.println("messages:" + dataClient.getDestUid()+"---" + dataClient.getSrcUid());
-                             //System.out.println("socket test :   " + dataClient.getSocket());
-                             if(dataClient.getHeader()== TypeProtocol.REQUEST_CONNECT)
-                             {
+                             
+                             
+                             if(dataClient.getHeader()== TypeProtocol.REQUEST_CONNECT){
                                  System.out.println(dataClient.getHeader());
                                  System.out.println("source : " + dataClient.getSrcUid());
                                  System.out.println("Port : "+dataClient.getPort());
@@ -98,6 +98,15 @@ public class Server implements Serializable{
                                  sendStateToClient();
                              }
                              
+                             
+                             if(dataClient.getHeader()== TypeProtocol.REQUEST_LOGOUT){
+                                 int a = findIndexOfUserByUserID(dataClient.getSrcUid());
+                                 listUserState.remove(a);
+                                 listUserState2.remove(a);
+                                 sendStateToClient();
+                                 System.out.println("logout : "+a);
+                             }
+                             
                          } 
                          catch (IOException ex) {} catch (ClassNotFoundException ex) { 
                              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,6 +123,14 @@ public class Server implements Serializable{
                 return u.name;
         }
         return "unknow";
+    }
+    
+    public int findIndexOfUserByUserID(String id){
+        for(int i=0;i<listUserState2.size();i++){
+            if(listUserState2.get(i).userID.equals(id))
+                return i;
+        }
+        return -1;
     }
     
     public int findIndexOfSocket(int port){

@@ -197,8 +197,11 @@ public class ClientFX extends Application implements Serializable{
         btn_logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                currentUser = null;
-                primaryStage.setScene(scene);
+                try {
+                    client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
+                    currentUser = null;
+                    primaryStage.setScene(scene);
+                } catch (IOException ex) {} catch (InterruptedException ex) {}
             }
         });
         HBox hbBtn_logout = new HBox(10);
