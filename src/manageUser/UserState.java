@@ -6,13 +6,15 @@
 package manageUser;
 
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 /**
  *
  * @author ThayLe
  */
-public class UserState {
+public class UserState implements Serializable{
     public String userID;
     public String userName;
     public InputStream ctr_is;
@@ -21,8 +23,9 @@ public class UserState {
     public OutputStream video_os;
     public String state;
     public String desID;
+    public ObjectOutputStream ctr_oos;
 
-    public UserState(String userID, String userName, InputStream ctr_is, OutputStream ctr_os, InputStream video_is, OutputStream video_os, String state, String desID) {
+    public UserState(String userID, String userName, InputStream ctr_is, OutputStream ctr_os, InputStream video_is, OutputStream video_os, String state, String desID, ObjectOutputStream ctr_oos) {
         this.userID = userID;
         this.userName = userName;
         this.ctr_is = ctr_is;
@@ -31,7 +34,10 @@ public class UserState {
         this.video_os = video_os;
         this.state = state;
         this.desID = desID;
+        this.ctr_oos = ctr_oos;
     }
+
+    
 
     public UserState(String userID, String userName, String state) {
         this.userID = userID;

@@ -66,16 +66,6 @@ public class Server {
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
 
-            if(socketnumber > -1){
-                System.out.println("sending to client");
-                outputStreamList[socketnumber] = socket[socketnumber].getOutputStream();
-                objectOutputStreamList[socketnumber] = new ObjectOutputStream(outputStreamList[socketnumber]);
-                objectOutputStreamList[socketnumber].writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"=0","IamServer"));
-            }
-          
-            objectOutputStreamList[0].writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"test","IamServer"));
-            
-
             
             new Thread(new Runnable() {
                 @Override
@@ -93,8 +83,16 @@ public class Server {
                                  System.out.println("Port : "+dataClient.getPort());
                                  int a = findIndexOfSocket(dataClient.getPort());
                                  System.out.println("find port : "+a);
-                                 listUserState.add(new UserState(dataClient.getSrcUid(), findUsernameByID(dataClient.getSrcUid()), "free"));
+                                 listUserState.add(new UserState(dataClient.getSrcUid(), 
+                                         findUsernameByID(dataClient.getSrcUid()),
+                                         socket[a].getInputStream(),
+                                         socket[a].getOutputStream(),
+                                         null,null,"free",null,
+                                         new ObjectOutputStream(socket[a].getOutputStream())
+                                 ));
+                                 sendStateToClient();
                                  System.out.println(listUserState.size()+findUsernameByID(dataClient.getSrcUid()));
+                                 listUserState.get(0).ctr_oos.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"=0132","IamServer"));
                              }
                              
                          } 
@@ -121,6 +119,13 @@ public class Server {
                 return i;
         }
         return -1;
+    }
+    
+    public void sendStateToClient() throws IOException{
+       
+        for(UserState u : listUserState){
+            u.ctr_oos.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"send to all","IamServer"));
+        }
     }
     
     public void sendToClient(){

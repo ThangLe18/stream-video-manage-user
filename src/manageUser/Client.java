@@ -50,8 +50,8 @@ public class Client {
                      while(true){
                          try {
                              System.out.println(".");
-                             MessagePackage m = (MessagePackage) objectInputStream.readObject();
-                             System.out.println("messages from Server:" + m.getDestUid()+"---" + m.getSrcUid());
+                             MessagePackage l = (MessagePackage) objectInputStream.readObject();
+                             System.out.println("messages from Server:" + l.getDestUid());
                          } 
                          catch (IOException ex) {System.out.println(ex);} 
                          catch (ClassNotFoundException ex) {System.out.println(ex);}
