@@ -43,7 +43,6 @@ public class Server implements Serializable{
         Server server = new Server();
         server.createServerSocket();
         server.listenFromClient();
-        server.sendToClient();
     }
     
     
@@ -129,15 +128,12 @@ public class Server implements Serializable{
         
     ArrayList<UserState> p = listUserState;
        for(UserState u : listUserState)
-            u.ctr_oos.writeObject(listUserState2);
-        
+       {
+           System.out.println("send state to client : "+listUserState2.size());
+           u.ctr_oos.writeObject(listUserState2);
+       }
     }
-//listUserState.get(0).ctr_oos.writeObject(new MessagePackage(TypeProtocol.CALLING_VIDEO,"=0132","IamServer"));
-
     
-    public void sendToClient(){
-
-    }
 }
 
 

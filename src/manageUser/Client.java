@@ -51,8 +51,7 @@ public class Client implements Serializable{
                 {
                      while(true){
                          try {
-                             List<UserStateDataSend> l = new ArrayList<>();
-                             l = (List<UserStateDataSend>) objectInputStream.readObject();
+                             List<UserStateDataSend> l = (List<UserStateDataSend>) objectInputStream.readObject();
                              System.out.println("messages from Server:" + l.size());
                          } 
                          catch (IOException ex) {System.out.println(ex);} 
