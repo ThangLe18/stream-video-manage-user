@@ -107,6 +107,22 @@ public class Server implements Serializable{
                                  System.out.println("logout : "+a);
                              }
                              
+                             
+                             if(dataClient.getHeader()== TypeProtocol.REQUEST_CALL_VIDEO){
+                                 int a = findIndexOfUserByUserID(dataClient.getSrcUid());
+                                 int b = findIndexOfUserByUserID(dataClient.getDestUid());
+                                 //listUserState.get(a)
+                                 listUserState2.get(a).setState("iscalling");
+                                 listUserState2.get(a).setDesID(dataClient.getDestUid());
+                                 listUserState2.get(b).setState("iscalled");
+                                 listUserState2.get(b).setDesID("null");
+                                 listUserState.get(a).setState("iscalling");
+                                 listUserState.get(a).setDesID(dataClient.getDestUid());
+                                 listUserState.get(b).setState("iscalled");
+                                 listUserState.get(b).setDesID("null");
+                                 sendStateToClient();
+                             }
+                             
                          } 
                          catch (IOException ex) {} catch (ClassNotFoundException ex) { 
                              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

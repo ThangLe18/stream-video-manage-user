@@ -23,6 +23,7 @@ public class Client implements Serializable{
     public InputStream inputStream;
     public ObjectOutputStream objectOutputStream;
     public ObjectInputStream objectInputStream;
+    public static String currentActivity;
     public ArrayList<UserStateDataSend> listUserStateDataSend = new ArrayList<>();
     public boolean updateState = false;
 
@@ -54,6 +55,7 @@ public class Client implements Serializable{
         Thread.sleep(200);
     }
     public void listenFromServer() throws IOException{
+        currentActivity = new String();
         InputStream inputStream = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
         new Thread(new Runnable() {
@@ -65,6 +67,9 @@ public class Client implements Serializable{
                              listUserStateDataSend = (ArrayList<UserStateDataSend>) (List<UserStateDataSend>) objectInputStream.readObject();
                              System.out.println("messages from Server:" + listUserStateDataSend.size());
                              setUpdateState(true);
+                             for(UserStateDataSend pp : listUserStateDataSend){
+                                 System.out.println(pp.userID+"----"+pp.userName+"----"+pp.state+"----"+pp.desID);
+                             }
                          } 
                          catch (IOException ex) {System.out.println(ex);} 
                          catch (ClassNotFoundException ex) {System.out.println(ex);}

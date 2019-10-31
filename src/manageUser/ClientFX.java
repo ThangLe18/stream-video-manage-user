@@ -18,8 +18,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -39,12 +42,20 @@ import javafx.stage.Stage;
 public class ClientFX extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
+    Text nameUser;
+    public static Text activity;
     public static ListView<String> listView;
-    UserData currentUser;
+    public static UserData currentUser;
+    public static String currentSelectedUser;
+    public static String currentSelectedUserID;
     public static Client client;
+    public static String currentActivity;
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
+        currentSelectedUser = new String();
+        currentSelectedUserID = new String();
+        currentActivity = new String();
         userData.add(new UserData("12347162", "Mickey js","a", "1"));
         userData.add(new UserData("12341527", "Rancix ft","b", "1"));
         userData.add(new UserData("66211343", "Aslhycole","c", "1"));
@@ -87,6 +98,7 @@ public class ClientFX extends Application implements Serializable{
                 UserData m = checkLogin(userTextField.getText(), pwBox.getText());
                 if(m != null) {
                     currentUser = m;
+                    nameUser.setText(currentUser.name);
                     primaryStage.setScene(scene2);
                     client = new Client();
                     try {
@@ -127,6 +139,12 @@ public class ClientFX extends Application implements Serializable{
         scene2 = new Scene(grid2, 300, 275);
         
         
+        nameUser = new Text("Your name");
+        nameUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+        grid2.add(nameUser, 0, 0, 5, 1);
+        
+        activity = new Text("Free");
+        grid2.add(activity, 1, 0, 5, 1);
         
         //button call
         Button btn_call = new Button("Call");
@@ -134,18 +152,28 @@ public class ClientFX extends Application implements Serializable{
         btn_call.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                try {
+                    if(client.listUserStateDataSend.get(findIndexUserByID(currentSelectedUserID)).getState().equals("free"))
+                    {
+                        client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_CALL_VIDEO,
+                            currentSelectedUserID, currentUser.userID, 0));
+                    }
+                    else{
+                        showMyAlert(currentSelectedUser + " is busy!");
+                    }
+                } catch (IOException ex) {} catch (InterruptedException ex) {}
             }
         });
         HBox hbBtn_call = new HBox(10);
         hbBtn_call.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_call.getChildren().add(btn_call);
-        grid2.add(hbBtn_call, 0, 0);
+        grid2.add(hbBtn_call, 0, 1);
         
         
         
         
         
-        //nutton end call
+        //button end call
         Button btn_endcall = new Button("End call");
         btn_endcall.setMinWidth(100);btn_endcall.setMaxWidth(100);
         btn_endcall.setOnAction(new EventHandler<ActionEvent>() {
@@ -156,7 +184,7 @@ public class ClientFX extends Application implements Serializable{
         HBox hbBtn_endcall = new HBox(10);
         hbBtn_endcall.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_endcall.getChildren().add(btn_endcall);
-        grid2.add(hbBtn_endcall, 0, 3);
+        grid2.add(hbBtn_endcall, 0, 4);
         
         
         
@@ -172,7 +200,7 @@ public class ClientFX extends Application implements Serializable{
         HBox hbBtn_acceptcall = new HBox(10);
         hbBtn_acceptcall.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_acceptcall.getChildren().add(btn_acceptcall);
-        grid2.add(hbBtn_acceptcall, 0, 2);
+        grid2.add(hbBtn_acceptcall, 0, 3);
         
         
         
@@ -187,7 +215,7 @@ public class ClientFX extends Application implements Serializable{
         HBox hbBtn_rejectcall = new HBox(10);
         hbBtn_rejectcall.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_rejectcall.getChildren().add(btn_rejectcall);
-        grid2.add(hbBtn_rejectcall, 0, 1);
+        grid2.add(hbBtn_rejectcall, 0, 2);
         
         
         
@@ -207,7 +235,7 @@ public class ClientFX extends Application implements Serializable{
         HBox hbBtn_logout = new HBox(10);
         hbBtn_logout.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_logout.getChildren().add(btn_logout);
-        grid2.add(hbBtn_logout, 0, 4);
+        grid2.add(hbBtn_logout, 0, 5);
         
         
         
@@ -219,8 +247,33 @@ public class ClientFX extends Application implements Serializable{
         listView.setPrefWidth(260);
         listView.setMaxWidth(260);
         listView.setPrefHeight(150);
-        GridPane.setConstraints(listView, 1, 0, 6, 5);
+        GridPane.setConstraints(listView, 1, 1, 6, 5);
         grid2.getChildren().add(listView);
+        
+        
+        
+        
+        listView.setCellFactory(lv -> {
+            ListCell<String> cell = new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(item);
+                }
+            };
+            cell.setOnMouseClicked(e -> {
+                if (!cell.isEmpty()) {
+                    currentSelectedUser = cell.getItem();
+                    currentSelectedUserID = findIDByName(currentSelectedUser);
+                    System.out.println("You selected : " + currentSelectedUser+"---"+currentSelectedUserID);
+                    e.consume();
+                }
+            });
+            return cell;
+        });
+        listView.setOnMouseClicked(e -> {
+            System.out.println("You clicked on an empty cell");
+        });
         
         
         
@@ -236,6 +289,7 @@ public class ClientFX extends Application implements Serializable{
                                     if(client.isUpdateState() == true)
                                     {
                                         updateListUserOnline();
+                                        updateMyActivity();
                                         client.setUpdateState(false);
                                         Thread.sleep(1000);
                                     }
@@ -256,8 +310,51 @@ public class ClientFX extends Application implements Serializable{
         listView.getItems().clear();
         listView.getItems().add("----ListUserOnline----");
         for(UserStateDataSend u2 : client.listUserStateDataSend ){
-            listView.getItems().add(u2.userName);
+            if(!u2.userName.equals(currentUser.name)) listView.getItems().add(u2.userName);
         }
+    }
+    
+    public static void updateMyActivity(){
+        String state = client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getState();
+        String desID = client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getDesID();
+        if(state.equals("iscalling")) {
+            activity.setText("Calling to "+ currentSelectedUser);
+        }
+        if(state.equals("iscalled")) {
+            activity.setText("Calling from "+ findNameByDesID(currentUser.userID));
+        }
+    }
+    
+    public static String findNameByDesID(String name){
+        for(UserStateDataSend uu : client.listUserStateDataSend){
+            if(uu.desID.equals(name)) 
+                return uu.userName;
+        }
+        return "unknow";
+    }
+    
+    public static String findIDByName(String name){
+        for(UserStateDataSend uu : client.listUserStateDataSend){
+            if(uu.userName.equals(name)) 
+                return uu.userID;
+        }
+        return "idnull";
+    }
+    
+    public static int findIndexUserByID(String id){
+        for(int i=0;i<client.listUserStateDataSend.size();i++){
+            if(client.listUserStateDataSend.get(i).userID.equals(id)) 
+                return i;
+        }
+        return -1;
+    }
+    
+    public static void showMyAlert(String message){
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Information Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     
     public static UserData checkLogin(String username,String password){
