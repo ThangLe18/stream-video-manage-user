@@ -186,6 +186,10 @@ public class Server implements Serializable{
                                  int m = findIndexOfUserByUserID(dataClient.getSrcUid());
                                  listUserState.get(m).setVideo_is(socketVideo[a].getInputStream());
                                  listUserState.get(m).setVideo_os(socketVideo[a].getOutputStream());
+                                 
+                                 for(UserState us : listUserState){
+                                     System.out.println("this port : "+ us.getVideo_os());
+                                 }
                              }
                              
                          } 

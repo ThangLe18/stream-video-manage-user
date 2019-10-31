@@ -265,11 +265,12 @@ public class ClientFX extends Application implements Serializable{
         btn_logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                try {
-                    client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
-                    currentUser = null;
-                    stage.setScene(scene);
-                } catch (IOException ex) {} catch (InterruptedException ex) {}
+//                try {
+//                    client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
+//                    currentUser = null;
+//                    stage.setScene(scene);
+//                } catch (IOException ex) {} catch (InterruptedException ex) {}
+                startStream(stage2);
             }
         });
         HBox hbBtn_logout = new HBox(10);
@@ -453,6 +454,22 @@ public class ClientFX extends Application implements Serializable{
          try {
                client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
          } catch (IOException ex) {} catch (InterruptedException ex) {}
+    }
+    
+    
+    
+    public static void startStream(Stage primaryStage){
+        System.out.println("start stream");
+        primaryStage = new Stage();
+        primaryStage.setTitle("StreamVideo");
+        GridPane grid3 = new GridPane();
+        grid3.setAlignment(Pos.CENTER);
+        grid3.setHgap(10);
+        grid3.setVgap(10);
+        grid3.setPadding(new Insets(25, 25, 25, 25));
+        Scene scene = new Scene(grid3, 300, 275);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
     
 }

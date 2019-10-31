@@ -42,18 +42,6 @@ public class VideoClientFXWebcam_Client1 extends Application {
         launch(args);
     }
     
-    public static final CountDownLatch latch = new CountDownLatch(1);
-
-    public static VideoClientFXWebcam_Client1 videoClientFXWebcam_Client1 = null;
-    
-    public static VideoClientFXWebcam_Client1 waitForStartUpTest() {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return videoClientFXWebcam_Client1;
-    }
     
 
     @Override
