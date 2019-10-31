@@ -43,6 +43,11 @@ public class ClientFX extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
     Text nameUser;
+    public static Button btn_call;
+    public static Button btn_endcall;
+    public static Button btn_acceptcall;
+    public static Button btn_rejectcall;
+    public static Button btn_logout;
     public static Text activity;
     public static ListView<String> listView;
     public static UserData currentUser;
@@ -53,8 +58,8 @@ public class ClientFX extends Application implements Serializable{
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
-        currentSelectedUser = new String();
-        currentSelectedUserID = new String();
+        currentSelectedUser = new String("");
+        currentSelectedUserID = new String("");
         currentActivity = new String();
         userData.add(new UserData("12347162", "Mickey js","a", "1"));
         userData.add(new UserData("12341527", "Rancix ft","b", "1"));
@@ -146,8 +151,12 @@ public class ClientFX extends Application implements Serializable{
         activity = new Text("Free");
         grid2.add(activity, 1, 0, 5, 1);
         
+        
+        
+        
         //button call
-        Button btn_call = new Button("Call");
+        btn_call = new Button("Call");
+        btn_call.setDisable(true);
         btn_call.setMinWidth(100);btn_call.setMaxWidth(100);
         btn_call.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -174,11 +183,16 @@ public class ClientFX extends Application implements Serializable{
         
         
         //button end call
-        Button btn_endcall = new Button("End call");
+        btn_endcall = new Button("End call");
+        btn_endcall.setDisable(true);
         btn_endcall.setMinWidth(100);btn_endcall.setMaxWidth(100);
         btn_endcall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                try {
+                    client.sendMessage(new MessagePackage(TypeProtocol.END_CALL_VIDEO,
+                            findDesIDByID(currentUser.userID), currentUser.userID, 0));
+                } catch (IOException ex) {} catch (InterruptedException ex) {}
             }
         });
         HBox hbBtn_endcall = new HBox(10);
@@ -189,7 +203,8 @@ public class ClientFX extends Application implements Serializable{
         
         
         //button accept call
-        Button btn_acceptcall = new Button("Accept call");
+        btn_acceptcall = new Button("Accept call");
+        btn_acceptcall.setDisable(true);
         btn_acceptcall.setMinWidth(100);btn_acceptcall.setMaxWidth(100);
         btn_acceptcall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -205,7 +220,8 @@ public class ClientFX extends Application implements Serializable{
         
         
         // button eject call
-        Button btn_rejectcall = new Button("Eject call");
+        btn_rejectcall = new Button("Eject call");
+        btn_rejectcall.setDisable(true);
         btn_rejectcall.setMinWidth(100);btn_rejectcall.setMaxWidth(100);
         btn_rejectcall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -227,7 +243,8 @@ public class ClientFX extends Application implements Serializable{
         
         
         // button sign out
-        Button btn_logout = new Button("Sign out");
+        btn_logout = new Button("Sign out");
+        btn_logout.setDisable(true);
         btn_logout.setMinWidth(100);btn_logout.setMaxWidth(100);
         btn_logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -316,6 +333,7 @@ public class ClientFX extends Application implements Serializable{
         Thread.sleep(1000);
         listView.getItems().clear();
         listView.getItems().add("----ListUserOnline----");
+        listView.getItems().add("----ListUserOnline----");
         for(UserStateDataSend u2 : client.listUserStateDataSend ){
             if(!u2.userName.equals(currentUser.name)) listView.getItems().add(u2.userName);
         }
@@ -325,14 +343,25 @@ public class ClientFX extends Application implements Serializable{
         String state = client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getState();
         String desID = client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getDesID();
         if(state.equals("iscalling")) {
+            setStateButton(false, true, false, false, false);
             activity.setText("Calling to "+ currentSelectedUser);
         }
         if(state.equals("iscalled")) {
+            setStateButton(false, false, true, true, false);
             activity.setText("Calling from "+ findNameByDesID(currentUser.userID));
         }
         if(state.equals("free")) {
+            setStateButton(true, false, false, false, true);
             activity.setText("Free");
         }
+    }
+    
+    public static void setStateButton(Boolean btn1,Boolean btn2,Boolean btn3,Boolean btn4,Boolean btn5){
+        btn_call.setDisable(!btn1);
+        btn_endcall.setDisable(!btn2);
+        btn_acceptcall.setDisable(!btn3);
+        btn_rejectcall.setDisable(!btn4);
+        btn_logout.setDisable(!btn5);
     }
     
     public static String findNameByDesID(String id){
@@ -347,6 +376,14 @@ public class ClientFX extends Application implements Serializable{
         for(UserStateDataSend uu : client.listUserStateDataSend){
             if(uu.desID.equals(id)) 
                 return uu.userID;
+        }
+        return "idnull";
+    }
+    
+    public static String findDesIDByID(String id){
+        for(UserStateDataSend uu : client.listUserStateDataSend){
+            if(uu.userID.equals(id)) 
+                return uu.desID;
         }
         return "idnull";
     }
