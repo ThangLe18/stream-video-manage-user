@@ -9,7 +9,9 @@ package manageUser;
 import ServerVideo.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -121,6 +123,7 @@ public class ClientFX extends Application implements Serializable{
                             listView.getItems().add(ust.userName);
                         }
                         ready = true;
+                        connectToVideoSocket();
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
                 }
                 else showMyAlert("Login Failed!");
@@ -435,6 +438,14 @@ public class ClientFX extends Application implements Serializable{
             }
         }
         return null;
+    }
+    
+    
+    public static void connectToVideoSocket() throws IOException, InterruptedException{
+        Socket socket = new Socket("localhost", 5555);
+        System.out.println("Connected!" + socket);
+        client.sendMessage(new MessagePackage(TypeProtocol.SAVE_SOCKET_VIDEO,
+                            "null", currentUser.userID, socket.getLocalPort()));
     }
     
     @Override

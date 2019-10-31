@@ -43,7 +43,9 @@ public class Server implements Serializable{
         new Thread(new Runnable() {
                 @Override
                 public void run(){
-                    startVideoServer();
+                    try {
+                        startVideoServer();
+                    } catch (IOException ex) {}
                 }
             }).start();  
         
@@ -56,15 +58,13 @@ public class Server implements Serializable{
     public void createServerSocket() throws IOException{
         ss = new ServerSocket(7777);
         System.out.println("Created Controller socket!");
-        ss_video = new ServerSocket(5555);
-        System.out.println("Created Video socket!");
     }
     
     
     public void listenFromClient() throws IOException{
-        outputStreamList = new OutputStream[100];
-        objectOutputStreamList = new ObjectOutputStream[100];
-        socket = new Socket[100];
+        outputStreamList = new OutputStream[20];
+        objectOutputStreamList = new ObjectOutputStream[20];
+        socket = new Socket[20];
         Socket p = null;
         while(true){
             socketnumber++;
@@ -179,6 +179,15 @@ public class Server implements Serializable{
                                  sendStateToClient();
                              }
                              
+                             
+                             if(dataClient.getHeader()== TypeProtocol.SAVE_SOCKET_VIDEO){
+                                 int a = findIndexOfSocketVideo(dataClient.getPort());
+                                 System.out.println("findIndexOfSocketVideo : "+a);
+                                 int m = findIndexOfUserByUserID(dataClient.getSrcUid());
+                                 listUserState.get(m).setVideo_is(socketVideo[a].getInputStream());
+                                 listUserState.get(m).setVideo_os(socketVideo[a].getOutputStream());
+                             }
+                             
                          } 
                          catch (IOException ex) {} catch (ClassNotFoundException ex) { 
                              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -213,6 +222,14 @@ public class Server implements Serializable{
         return -1;
     }
     
+    public int findIndexOfSocketVideo(int port){
+        for(int i=0;i<socketnumberVideo;i++){
+            if(socketVideo[i].getPort() == port)
+                return i;
+        }
+        return -1;
+    }
+    
     public void sendStateToClient() throws IOException{
            for(UserState u : listUserState)
            {
@@ -223,47 +240,23 @@ public class Server implements Serializable{
            }
         }
     
-    public static void startVideoServer(){
-//        socketnumberVideo = -1;
-//     
-//            socketnumberVideo++;
-//            socketVideo[socketnumberVideo] = ss_video.accept();
-//            System.out.println("connected a video client");
-//        
-        
-        
+    public static void startVideoServer() throws IOException{
+        ss_video=new ServerSocket(5555);
+        socketVideo = new Socket[20];
         ServerSocket ss=null;
-        Socket scc=null;
-        Socket scc1=null;
-        OutputStream os1=null,os2=null;
-        InputStream is1=null,is2=null;
+        socketnumberVideo = -1;
         try {
-            ss=new ServerSocket(5555);
-            System.out.println("Waiting for first client...");
-            scc=ss.accept();
-            System.out.println("client socket : " + scc);
-            System.out.println("Client 1 is just connected! waiting for client 2...");
-            scc1=ss.accept();
-            System.out.println("Client 2 is just connected! Streaming...");
-            os1=scc.getOutputStream();
-            os2=scc1.getOutputStream();
-            is1=scc.getInputStream();
-            is2=scc1.getInputStream();
-            os1.write(100);os1.flush();
-            os2.write(100);os2.flush();
-            System.out.println(scc1);
-            
-            System.out.println("done");
-            
-            VideoForwardPacket v1=new VideoForwardPacket(os2, is1, 1);  //pair two client
-            //VideoForwardPacket v2=new VideoForwardPacket(os1, is2, 1);
-            Thread t1=new Thread(v1);
-            //Thread t2=new Thread(v2);
-            t1.start();
-            //t2.start();
-        } catch (IOException ex) {
-            Logger.getLogger(VideoServer133.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            while(true){
+                
+                
+                socketnumberVideo++;
+                System.out.println("Waiting for a client...");
+                socketVideo[socketnumberVideo] = ss_video.accept();;
+                System.out.println("New client socket : " + socketVideo[socketnumberVideo]);
+                
+                
+            }
+        } catch (IOException ex) {}
     }
 }
 
