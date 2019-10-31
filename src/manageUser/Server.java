@@ -1,6 +1,7 @@
 package manageUser;
 
 
+import ServerVideo.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,7 +37,14 @@ public class Server implements Serializable{
         userData.add(new UserData("66211343", "Aslhycole","d", "12345678"));
         userData.add(new UserData("42211455", "Micl Owen","q", "12345678"));
         userData.add(new UserData("55223114", "FrLampard","w", "12345678"));
+        KioskVideoServerPacket_MainServer videoServer = new KioskVideoServerPacket_MainServer();
         
+        new Thread(new Runnable() {
+                @Override
+                public void run(){
+                    videoServer.startVideoServer();
+                }
+            }).start();  
         Server server = new Server();
         server.createServerSocket();
         server.listenFromClient();

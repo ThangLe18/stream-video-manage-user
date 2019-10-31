@@ -6,7 +6,6 @@
 package manageUser;
 
 
-import ServerVideo.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -40,7 +39,7 @@ import javafx.stage.Stage;
  *
  * @author ThayLe
  */
-public class ClientFX extends Application implements Serializable{
+public class ClientFX2 extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
     Text nameUser;
@@ -327,7 +326,9 @@ public class ClientFX extends Application implements Serializable{
                                     }
                                 }
                                 Thread.sleep(1000);
-                            } catch (InterruptedException ex) {} catch (Exception ex) {}
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ClientFX.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                      }
                 }
             }).start();  
@@ -345,7 +346,7 @@ public class ClientFX extends Application implements Serializable{
         }
     }
     
-    public static void updateMyActivity() throws Exception{
+    public static void updateMyActivity(){
         String state = client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getState();
         String desID = client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getDesID();
         if(state.equals("iscalling")) {

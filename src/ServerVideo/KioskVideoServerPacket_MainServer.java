@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author kiosk01
  */
 public class KioskVideoServerPacket_MainServer {
-    public static void main(String[] argv)
+    public void startVideoServer()
     {
         ServerSocket ss=null;
         Socket scc=null;
@@ -27,7 +27,7 @@ public class KioskVideoServerPacket_MainServer {
         OutputStream os1=null,os2=null;
         InputStream is1=null,is2=null;
         try {
-            ss=new ServerSocket(7777);
+            ss=new ServerSocket(5555);
             System.out.println("Waiting for first client...");
             scc=ss.accept();
             System.out.println("client socket : " + scc);
