@@ -1,13 +1,13 @@
-package ServerVideo;
+package ServerVideoBackup;
+
+
 
 
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -32,33 +32,18 @@ import org.bytedeco.javacv.Java2DFrameConverter;
 /**
  * @author Dmitriy Gerashenko <d.a.gerashenko@gmail.com>
  */
-public class VideoClientFXWebcam_Client1 extends Application {
+public class VideoClientFX_Client2 extends Application {
 
-    private static final Logger LOG = Logger.getLogger(VideoClientFXWebcam_Client1.class.getName());
+    private static final Logger LOG = Logger.getLogger(VideoClientFX_Client2.class.getName());
 
     private static volatile Thread playThread;
 
     public static void main(String[] args) {
         launch(args);
     }
-    
-    public static final CountDownLatch latch = new CountDownLatch(1);
-
-    public static VideoClientFXWebcam_Client1 videoClientFXWebcam_Client1 = null;
-    
-    public static VideoClientFXWebcam_Client1 waitForStartUpTest() {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return videoClientFXWebcam_Client1;
-    }
-    
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        System.out.println("ok start");
         final StackPane root = new StackPane();
         final ImageView imageView = new ImageView();
 
@@ -68,20 +53,15 @@ public class VideoClientFXWebcam_Client1 extends Application {
 
         final Scene scene = new Scene(root, 640, 480);
 
-        primaryStage.setTitle("Video + audio");
+        primaryStage.setTitle("Client : recieve");
         primaryStage.setScene(scene);
         primaryStage.show();
 
         System.out.println("Connecting to server...");
         Socket scc=new Socket("localhost",5555);
-        System.out.println("client port : "+scc);
         InputStream is=scc.getInputStream();
-        OutputStream os=scc.getOutputStream();
         System.out.println("Connected to server, start playing...");
         
-        VideoAudioWriterWebcam v1=new VideoAudioWriterWebcam(os, 0, 1);
-        Thread t1=new Thread(v1);
-        t1.start();
         playThread = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -89,12 +69,9 @@ public class VideoClientFXWebcam_Client1 extends Application {
                     final String videoFilename = "/home/kiosk01/bunny.mp4";
                     //final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(videoFilename);
                     final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(is);
-                    //final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("rtsp://127.0.0.1:8443/live/livestream?deviceid=123abcdef32153421");
-                    //final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("rtsp://admin:kiosk123@192.168.68.108");
                     grabber.start();
                     primaryStage.setWidth(grabber.getImageWidth());
                     primaryStage.setHeight(grabber.getImageHeight());
-                   
                     final AudioFormat audioFormat = new AudioFormat(grabber.getSampleRate(), 16, grabber.getAudioChannels(), true, true);
 
                     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
@@ -133,7 +110,6 @@ public class VideoClientFXWebcam_Client1 extends Application {
                              * We need this because soundLine.write ignores
                              * interruptions during writing.
                              */
-                            
                             try {
                                 executor.submit(new Runnable() {
                                     public void run() {
@@ -144,7 +120,6 @@ public class VideoClientFXWebcam_Client1 extends Application {
                             } catch (InterruptedException interruptedException) {
                                 Thread.currentThread().interrupt();
                             }
-                            
                         }
                     }
                     executor.shutdownNow();

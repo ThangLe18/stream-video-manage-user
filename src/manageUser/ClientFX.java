@@ -56,6 +56,8 @@ public class ClientFX extends Application implements Serializable{
     public static String currentSelectedUserID;
     public static Client client;
     public static String currentActivity;
+    public static Stage stage,stage2;
+    public static VideoClientFXWebcam_Client1 startUpTest;
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
@@ -70,16 +72,19 @@ public class ClientFX extends Application implements Serializable{
         launch(args);
     }
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
+        
+        
         // Screen login
-        primaryStage.setTitle("StreamVideo");
+        stage.setTitle("StreamVideo");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
         scene = new Scene(grid, 300, 275);
-        primaryStage.setScene(scene);
+        stage.setScene(scene);
         
         Text scenetitle = new Text("Welcome");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -106,7 +111,7 @@ public class ClientFX extends Application implements Serializable{
                 if(m != null) {
                     currentUser = m;
                     nameUser.setText(currentUser.name);
-                    primaryStage.setScene(scene2);
+                    stage.setScene(scene2);
                     client = new Client();
                     try {
                         client.connectSocket(currentUser.userID);
@@ -125,7 +130,7 @@ public class ClientFX extends Application implements Serializable{
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 4);
-        primaryStage.show();
+        stage.show();
         
         
         
@@ -260,7 +265,7 @@ public class ClientFX extends Application implements Serializable{
                 try {
                     client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
                     currentUser = null;
-                    primaryStage.setScene(scene);
+                    stage.setScene(scene);
                 } catch (IOException ex) {} catch (InterruptedException ex) {}
             }
         });
@@ -335,6 +340,7 @@ public class ClientFX extends Application implements Serializable{
 
 
     public static void updateListUserOnline() throws InterruptedException{
+        
         listView.getItems().add("");
         Thread.sleep(1000);
         listView.getItems().clear();

@@ -1,4 +1,5 @@
-package ServerVideo;
+package ServerVideoBackup;
+
 
 
 
@@ -7,7 +8,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -41,20 +41,6 @@ public class VideoClientFXWebcam_Client1 extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
-    public static final CountDownLatch latch = new CountDownLatch(1);
-
-    public static VideoClientFXWebcam_Client1 videoClientFXWebcam_Client1 = null;
-    
-    public static VideoClientFXWebcam_Client1 waitForStartUpTest() {
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return videoClientFXWebcam_Client1;
-    }
-    
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
