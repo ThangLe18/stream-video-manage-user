@@ -1,9 +1,6 @@
 package manageUser;
 
-import Test.*;
-import static Test.ServerTest.checkActive;
-import static Test.ServerTest.ssc_ctrl;
-import static Test.ServerTest.sscontroll;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -34,11 +31,11 @@ public class Server implements Serializable{
     public ArrayList<UserStateDataSend> listUserState2 = new ArrayList<>();
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         //login information
-        userData.add(new UserData("12347162", "Mickey js","a", "1"));
-        userData.add(new UserData("12341527", "Rancix ft","b", "1"));
-        userData.add(new UserData("66211343", "Aslhycole","c", "1"));
-        userData.add(new UserData("42211455", "Michel Owen","d", "1"));
-        userData.add(new UserData("55223114", "Frank lampard","e", "1"));
+        userData.add(new UserData("12347162", "Mickey Jr","a", "12345678"));
+        userData.add(new UserData("12341527", "Rancix Sr","s", "12345678"));
+        userData.add(new UserData("66211343", "Aslhycole","d", "12345678"));
+        userData.add(new UserData("42211455", "Micl Owen","q", "12345678"));
+        userData.add(new UserData("55223114", "FrLampard","w", "12345678"));
         
         Server server = new Server();
         server.createServerSocket();
@@ -152,6 +149,22 @@ public class Server implements Serializable{
                                  listUserState.get(a).setDesID("null");
                                  listUserState.get(b).setState("free");
                                  listUserState.get(b).setDesID("null");
+                                 sendStateToClient();
+                             }
+                             
+                             
+                             if(dataClient.getHeader()== TypeProtocol.ACCEPT_CALL_VIDEO){
+                                 int a = findIndexOfUserByUserID(dataClient.getSrcUid());
+                                 int b = findIndexOfUserByUserID(dataClient.getDestUid());
+                                 //listUserState.get(a)
+                                 listUserState2.get(a).setState("incalling");
+                                 listUserState2.get(a).setDesID(dataClient.getDestUid());
+                                 listUserState2.get(b).setState("incalling");
+                                 listUserState2.get(b).setDesID(dataClient.getSrcUid());
+                                 listUserState.get(a).setState("incalling");
+                                 listUserState.get(a).setDesID(dataClient.getDestUid());
+                                 listUserState.get(b).setState("incalling");
+                                 listUserState.get(b).setDesID(dataClient.getSrcUid());
                                  sendStateToClient();
                              }
                              

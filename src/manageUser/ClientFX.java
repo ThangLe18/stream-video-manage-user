@@ -61,11 +61,11 @@ public class ClientFX extends Application implements Serializable{
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
-        userData.add(new UserData("12347162", "Mickey js","a", "1"));
-        userData.add(new UserData("12341527", "Rancix ft","b", "1"));
-        userData.add(new UserData("66211343", "Aslhycole","c", "1"));
-        userData.add(new UserData("42211455", "Michel Owen","d", "1"));
-        userData.add(new UserData("55223114", "Frank lampard","e", "1"));
+        userData.add(new UserData("12347162", "Mickey Jr","a", "12345678"));
+        userData.add(new UserData("12341527", "Rancix Sr","s", "12345678"));
+        userData.add(new UserData("66211343", "Aslhycole","d", "12345678"));
+        userData.add(new UserData("42211455", "Micl Owen","q", "12345678"));
+        userData.add(new UserData("55223114", "FrLampard","w", "12345678"));
         launch(args);
     }
     @Override
@@ -91,6 +91,7 @@ public class ClientFX extends Application implements Serializable{
         Label pw = new Label("Password:");
         grid.add(pw, 0, 2);
         PasswordField pwBox = new PasswordField();
+        pwBox.setText("12345678");
         grid.add(pwBox, 1, 2);
         final Text actiontarget = new Text();
         actiontarget.setStyle("-fx-text-inner-color: red;");
@@ -116,7 +117,7 @@ public class ClientFX extends Application implements Serializable{
                         ready = true;
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
                 }
-                else actiontarget.setText("Login failed!");
+                else showMyAlert("Login Failed!");
             }
         });
         HBox hbBtn = new HBox(10);
@@ -209,7 +210,13 @@ public class ClientFX extends Application implements Serializable{
         btn_acceptcall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                System.out.println(currentUser.name);
+                try {
+                    if(client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getState().equals("iscalled"))
+                    {
+                        client.sendMessage(new MessagePackage(TypeProtocol.ACCEPT_CALL_VIDEO,
+                            findIDByDesID(currentUser.userID), currentUser.userID, 0));
+                    }
+                } catch (IOException ex) {} catch (InterruptedException ex) {}
             }
         });
         HBox hbBtn_acceptcall = new HBox(10);
@@ -354,6 +361,10 @@ public class ClientFX extends Application implements Serializable{
             setStateButton(true, false, false, false, true);
             activity.setText("Free");
         }
+        if(state.equals("incalling")) {
+            setStateButton(false, true, false, false, false);
+            activity.setText("In calling with "+ findNameByDesID(currentUser.userID));
+        }
     }
     
     public static void setStateButton(Boolean btn1,Boolean btn2,Boolean btn3,Boolean btn4,Boolean btn5){
@@ -419,6 +430,13 @@ public class ClientFX extends Application implements Serializable{
             }
         }
         return null;
+    }
+    
+    @Override
+    public void stop(){
+         try {
+               client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
+         } catch (IOException ex) {} catch (InterruptedException ex) {}
     }
     
 }
