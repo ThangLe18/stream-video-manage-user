@@ -123,6 +123,22 @@ public class Server implements Serializable{
                                  sendStateToClient();
                              }
                              
+                             
+                             if(dataClient.getHeader()== TypeProtocol.REJECT_CALL_VIDEO){
+                                 int a = findIndexOfUserByUserID(dataClient.getSrcUid());
+                                 int b = findIndexOfUserByUserID(dataClient.getDestUid());
+                                 //listUserState.get(a)
+                                 listUserState2.get(a).setState("free");
+                                 listUserState2.get(a).setDesID("null");
+                                 listUserState2.get(b).setState("free");
+                                 listUserState2.get(b).setDesID("null");
+                                 listUserState.get(a).setState("free");
+                                 listUserState.get(a).setDesID("null");
+                                 listUserState.get(b).setState("free");
+                                 listUserState.get(b).setDesID("null");
+                                 sendStateToClient();
+                             }
+                             
                          } 
                          catch (IOException ex) {} catch (ClassNotFoundException ex) { 
                              Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

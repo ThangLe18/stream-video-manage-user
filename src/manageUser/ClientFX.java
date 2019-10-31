@@ -210,6 +210,13 @@ public class ClientFX extends Application implements Serializable{
         btn_rejectcall.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                try {
+                    if(client.listUserStateDataSend.get(findIndexUserByID(currentUser.userID)).getState().equals("iscalled"))
+                    {
+                        client.sendMessage(new MessagePackage(TypeProtocol.REJECT_CALL_VIDEO,
+                            findIDByDesID(currentUser.userID), currentUser.userID, 0));
+                    }
+                } catch (IOException ex) {} catch (InterruptedException ex) {}
             }
         });
         HBox hbBtn_rejectcall = new HBox(10);
@@ -323,14 +330,25 @@ public class ClientFX extends Application implements Serializable{
         if(state.equals("iscalled")) {
             activity.setText("Calling from "+ findNameByDesID(currentUser.userID));
         }
+        if(state.equals("free")) {
+            activity.setText("Free");
+        }
     }
     
-    public static String findNameByDesID(String name){
+    public static String findNameByDesID(String id){
         for(UserStateDataSend uu : client.listUserStateDataSend){
-            if(uu.desID.equals(name)) 
+            if(uu.desID.equals(id)) 
                 return uu.userName;
         }
         return "unknow";
+    }
+    
+    public static String findIDByDesID(String id){
+        for(UserStateDataSend uu : client.listUserStateDataSend){
+            if(uu.desID.equals(id)) 
+                return uu.userID;
+        }
+        return "idnull";
     }
     
     public static String findIDByName(String name){
