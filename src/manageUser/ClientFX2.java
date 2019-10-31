@@ -59,7 +59,7 @@ import org.bytedeco.javacv.Java2DFrameConverter;
  *
  * @author ThayLe
  */
-public class ClientFX extends Application implements Serializable{
+public class ClientFX2 extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
     Text nameUser;
@@ -284,12 +284,12 @@ public class ClientFX extends Application implements Serializable{
         btn_logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                try {
+               try {
                     client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
                     currentUser = null;
                     stage.setScene(scene);
                 } catch (IOException ex) {} catch (InterruptedException ex) {}
-                        
+                    
             }
         });
         HBox hbBtn_logout = new HBox(10);
@@ -392,6 +392,7 @@ public class ClientFX extends Application implements Serializable{
         if(state.equals("incalling")) {
             setStateButton(false, true, false, false, false);
             activity.setText("In calling with "+ findNameByDesID(currentUser.userID));
+            startStream(stage2);
         }
     }
     
@@ -490,18 +491,13 @@ public class ClientFX extends Application implements Serializable{
 
         final Scene scene = new Scene(root, 640, 480);
 
-        primaryStage.setTitle("Video + audio");
+        primaryStage.setTitle("Client : recieve");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        
         InputStream is=socketVideo.getInputStream();
         OutputStream os=socketVideo.getOutputStream();
-        System.out.println("Connected to server, start playing...");
         
-        VideoAudioWriterWebcam v1=new VideoAudioWriterWebcam(os, 0, 1);
-        Thread t1=new Thread(v1);
-        t1.start();
         playThread = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -509,12 +505,9 @@ public class ClientFX extends Application implements Serializable{
                     final String videoFilename = "/home/kiosk01/bunny.mp4";
                     //final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(videoFilename);
                     final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(is);
-                    //final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("rtsp://127.0.0.1:8443/live/livestream?deviceid=123abcdef32153421");
-                    //final FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("rtsp://admin:kiosk123@192.168.68.108");
                     grabber.start();
                     primaryStage.setWidth(grabber.getImageWidth());
                     primaryStage.setHeight(grabber.getImageHeight());
-                   
                     final AudioFormat audioFormat = new AudioFormat(grabber.getSampleRate(), 16, grabber.getAudioChannels(), true, true);
 
                     final DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
@@ -549,13 +542,20 @@ public class ClientFX extends Application implements Serializable{
                                 outBuffer.putShort(val);
                             }
 
-                            executor.submit(new Runnable() {
-                                public void run() {
-                                    soundLine.write(outBuffer.array(), 0, outBuffer.capacity());
-                                    outBuffer.clear();
-                                }
-                            }).get();
-                            
+                            /**
+                             * We need this because soundLine.write ignores
+                             * interruptions during writing.
+                             */
+                            try {
+                                executor.submit(new Runnable() {
+                                    public void run() {
+                                        soundLine.write(outBuffer.array(), 0, outBuffer.capacity());
+                                        outBuffer.clear();
+                                    }
+                                }).get();
+                            } catch (InterruptedException interruptedException) {
+                                Thread.currentThread().interrupt();
+                            }
                         }
                     }
                     executor.shutdownNow();
