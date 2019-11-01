@@ -60,7 +60,7 @@ import org.bytedeco.javacv.Java2DFrameConverter;
  *
  * @author ThayLe
  */
-public class ClientFX2 extends Application implements Serializable{
+public class ClientFX_RecieveCall extends Application implements Serializable{
     Scene scene2;   //main screen
     Scene scene;    //login screen
     Text nameUser;
@@ -313,6 +313,7 @@ public class ClientFX2 extends Application implements Serializable{
         
         // button display video
         btn_displayvideo = new Button("Display Video");
+        btn_displayvideo.setDisable(true);
         btn_displayvideo.setMinWidth(100);btn_displayvideo.setMaxWidth(100);
         btn_displayvideo.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -320,7 +321,7 @@ public class ClientFX2 extends Application implements Serializable{
                 try {
                     startStream();
                 } catch (IOException ex) {
-                    Logger.getLogger(ClientFX.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
                 }     
             }
         });
@@ -423,7 +424,9 @@ public class ClientFX2 extends Application implements Serializable{
         }
         if(state.equals("incalling")) {
             setStateButton(false, true, false, false, false);
-            activity.setText("In calling with "+ findNameByDesID(currentUser.userID));
+            //activity.setText("In calling with "+ findNameByDesID(currentUser.userID));
+            activity.setText("In calling...");
+            btn_displayvideo.setDisable(false);
         }
     }
     
@@ -526,7 +529,7 @@ public class ClientFX2 extends Application implements Serializable{
 
         final Scene scene = new Scene(root, 640, 480);
 
-        primaryStage.setTitle("Client : recieve");
+        primaryStage.setTitle(currentUser.name);
         primaryStage.setScene(scene);
         primaryStage.show();
 
