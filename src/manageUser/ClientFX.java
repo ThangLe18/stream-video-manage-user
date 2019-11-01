@@ -76,6 +76,7 @@ public class ClientFX extends Application implements Serializable{
     public static String currentSelectedUser;
     public static String currentSelectedUserID;
     public static Client client;
+    public static Button btn_displayvideo;
     public static String currentActivity;
     public static Stage stage,stage2;
     private static volatile Thread playThread;
@@ -106,7 +107,7 @@ public class ClientFX extends Application implements Serializable{
         
         
         // Screen login
-        stage.setTitle("StreamVideo");
+        stage.setTitle("StreamVideo-Call");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -154,8 +155,6 @@ public class ClientFX extends Application implements Serializable{
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
                 }
                 else showMyAlert("Login Failed!");
-           
-                
             }
         });
         HBox hbBtn = new HBox(10);
@@ -310,33 +309,23 @@ public class ClientFX extends Application implements Serializable{
         
         
         
-        // button test
-        Button btn_test = new Button("Test Video Stream");
-        btn_test.setMinWidth(100);btn_test.setMaxWidth(100);
-        btn_test.setOnAction(new EventHandler<ActionEvent>() {
+        // button display video
+        btn_displayvideo = new Button("Display Video");
+        btn_displayvideo.setMinWidth(100);btn_displayvideo.setMaxWidth(100);
+        btn_displayvideo.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                
-                
-                
-                
                 try {
                     startStream();
                 } catch (IOException ex) {
                     Logger.getLogger(ClientFX.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-                
-                
-                
-                
-                        
+                }    
             }
         });
-        HBox hbBtn_test = new HBox(10);
-        hbBtn_test.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn_test.getChildren().add(btn_test);
-        grid2.add(hbBtn_test, 0, 6);
+        HBox hbBtn_displayvideo = new HBox(10);
+        hbBtn_displayvideo.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn_displayvideo.getChildren().add(btn_displayvideo);
+        grid2.add(hbBtn_displayvideo, 0, 6);
         
         
         
@@ -348,7 +337,7 @@ public class ClientFX extends Application implements Serializable{
         listView.setPrefWidth(260);
         listView.setMaxWidth(260);
         listView.setPrefHeight(150);
-        GridPane.setConstraints(listView, 1, 1, 6, 5);
+        GridPane.setConstraints(listView, 1, 1, 6, 6);
         grid2.getChildren().add(listView);
         
         
