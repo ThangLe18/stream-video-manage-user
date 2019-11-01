@@ -257,6 +257,8 @@ public class Server implements Serializable{
         }
     
     public static void startVideoServer() throws IOException{
+        KioskVideoServerPacket_MainServer sv= new KioskVideoServerPacket_MainServer();
+        sv.startStream();
         ss_video=new ServerSocket(5555);
         socketVideo = new Socket[20];
         ServerSocket ss=null;

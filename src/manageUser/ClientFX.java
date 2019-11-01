@@ -46,6 +46,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -64,6 +65,7 @@ public class ClientFX extends Application implements Serializable{
     Scene scene;    //login screen
     Text nameUser;
     public static Button btn_call;
+    public static int h=0;
     public static Button btn_endcall;
     public static Button btn_acceptcall;
     public static Button btn_rejectcall;
@@ -82,6 +84,12 @@ public class ClientFX extends Application implements Serializable{
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
     public static void main(String[] args) {
+        
+        
+        
+        
+        
+        
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
@@ -93,8 +101,8 @@ public class ClientFX extends Application implements Serializable{
         launch(args);
     }
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        stage = primaryStage;
+    public void start(Stage primaryStage1) throws Exception {
+        stage = primaryStage1;
         
         
         // Screen login
@@ -146,6 +154,8 @@ public class ClientFX extends Application implements Serializable{
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
                 }
                 else showMyAlert("Login Failed!");
+           
+                
             }
         });
         HBox hbBtn = new HBox(10);
@@ -296,6 +306,37 @@ public class ClientFX extends Application implements Serializable{
         hbBtn_logout.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn_logout.getChildren().add(btn_logout);
         grid2.add(hbBtn_logout, 0, 5);
+        
+        
+        
+        
+        // button test
+        Button btn_test = new Button("Test Video Stream");
+        btn_test.setMinWidth(100);btn_test.setMaxWidth(100);
+        btn_test.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                
+                
+                
+                
+                try {
+                    startStream();
+                } catch (IOException ex) {
+                    Logger.getLogger(ClientFX.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                
+                
+                
+                
+                        
+            }
+        });
+        HBox hbBtn_test = new HBox(10);
+        hbBtn_test.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn_test.getChildren().add(btn_test);
+        grid2.add(hbBtn_test, 0, 6);
         
         
         
@@ -477,9 +518,14 @@ public class ClientFX extends Application implements Serializable{
     
     
     
-    public static void startStream(Stage primaryStage) throws IOException{
+    
+    
+    
+    
+    
+    public static void startStream() throws IOException{
         System.out.println("start stream");
-        primaryStage = new Stage();
+        Stage primaryStage = new Stage();
         System.out.println("ok start");
         final StackPane root = new StackPane();
         final ImageView imageView = new ImageView();
@@ -488,15 +534,17 @@ public class ClientFX extends Application implements Serializable{
         imageView.fitWidthProperty().bind(primaryStage.widthProperty());
         imageView.fitHeightProperty().bind(primaryStage.heightProperty());
 
-        final Scene scene = new Scene(root, 640, 480);
+        final Scene scene3 = new Scene(root, 640, 480);
 
         primaryStage.setTitle("Video + audio");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene3);
         primaryStage.show();
 
-        
-        InputStream is=socketVideo.getInputStream();
-        OutputStream os=socketVideo.getOutputStream();
+        System.out.println("Connecting to server...");
+        Socket scc3=new Socket("localhost",4444);
+        System.out.println("client port : "+scc3);
+        InputStream is=scc3.getInputStream();
+        OutputStream os=scc3.getOutputStream();
         System.out.println("Connected to server, start playing...");
         
         VideoAudioWriterWebcam v1=new VideoAudioWriterWebcam(os, 0, 1);
@@ -549,12 +597,21 @@ public class ClientFX extends Application implements Serializable{
                                 outBuffer.putShort(val);
                             }
 
-                            executor.submit(new Runnable() {
-                                public void run() {
-                                    soundLine.write(outBuffer.array(), 0, outBuffer.capacity());
-                                    outBuffer.clear();
-                                }
-                            }).get();
+                            /**
+                             * We need this because soundLine.write ignores
+                             * interruptions during writing.
+                             */
+                            
+                            try {
+                                executor.submit(new Runnable() {
+                                    public void run() {
+                                        soundLine.write(outBuffer.array(), 0, outBuffer.capacity());
+                                        outBuffer.clear();
+                                    }
+                                }).get();
+                            } catch (InterruptedException interruptedException) {
+                                Thread.currentThread().interrupt();
+                            }
                             
                         }
                     }
@@ -570,6 +627,10 @@ public class ClientFX extends Application implements Serializable{
             }
         });
         playThread.start();
+        System.out.println("end stream");
     }
+    
+
+    
     
 }

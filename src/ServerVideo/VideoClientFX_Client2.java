@@ -57,7 +57,7 @@ public class VideoClientFX_Client2 extends Application {
         primaryStage.show();
 
         System.out.println("Connecting to server...");
-        Socket scc=new Socket("localhost",5555);
+        Socket scc=new Socket("localhost",4444);
         InputStream is=scc.getInputStream();
         System.out.println("Connected to server, start playing...");
         

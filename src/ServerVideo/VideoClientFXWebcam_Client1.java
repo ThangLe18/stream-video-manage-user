@@ -43,9 +43,26 @@ public class VideoClientFXWebcam_Client1 extends Application {
     }
     
     
-
+    
+    public static Stage primaryStage;
+//    public static final CountDownLatch latch = new CountDownLatch(1);
+//    public static VideoClientFXWebcam_Client1 clientVideo = null;
+//    public static VideoClientFXWebcam_Client1 waitForClient() {
+//        try {
+//            latch.await();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        return clientVideo;
+//    }
+//    public static void printSomething(){
+//        System.out.println("printSomething");
+//    }
+    
+    
     @Override
-    public void start(final Stage primaryStage) throws Exception {
+    public void start(final Stage stage) throws Exception {
+        primaryStage = stage;
         System.out.println("ok start");
         final StackPane root = new StackPane();
         final ImageView imageView = new ImageView();
@@ -61,7 +78,7 @@ public class VideoClientFXWebcam_Client1 extends Application {
         primaryStage.show();
 
         System.out.println("Connecting to server...");
-        Socket scc=new Socket("localhost",5555);
+        Socket scc=new Socket("localhost",4444);
         System.out.println("client port : "+scc);
         InputStream is=scc.getInputStream();
         OutputStream os=scc.getOutputStream();
