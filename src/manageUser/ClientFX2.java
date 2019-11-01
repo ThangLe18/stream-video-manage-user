@@ -539,9 +539,8 @@ public class ClientFX2 extends Application implements Serializable{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        System.out.println("Connecting to server...");
-        Socket scc=new Socket("localhost",4444);
-        InputStream is=scc.getInputStream();
+        
+        InputStream is=socketVideo.getInputStream();
         System.out.println("Connected to server, start playing...");
         
         playThread = new Thread(new Runnable() {

@@ -540,11 +540,9 @@ public class ClientFX extends Application implements Serializable{
         primaryStage.setScene(scene3);
         primaryStage.show();
 
-        System.out.println("Connecting to server...");
-        Socket scc3=new Socket("localhost",4444);
-        System.out.println("client port : "+scc3);
-        InputStream is=scc3.getInputStream();
-        OutputStream os=scc3.getOutputStream();
+        
+        InputStream is=socketVideo.getInputStream();
+        OutputStream os=socketVideo.getOutputStream();
         System.out.println("Connected to server, start playing...");
         
         VideoAudioWriterWebcam v1=new VideoAudioWriterWebcam(os, 0, 1);

@@ -257,8 +257,7 @@ public class Server implements Serializable{
         }
     
     public static void startVideoServer() throws IOException{
-        KioskVideoServerPacket_MainServer sv= new KioskVideoServerPacket_MainServer();
-        sv.startStream();
+
         ss_video=new ServerSocket(5555);
         socketVideo = new Socket[20];
         ServerSocket ss=null;
@@ -271,6 +270,20 @@ public class Server implements Serializable{
                 System.out.println("Waiting for a client...");
                 socketVideo[socketnumberVideo] = ss_video.accept();
                 System.out.println("New client socket : " + socketVideo[socketnumberVideo]);
+                if(socketnumberVideo == 1){
+                    System.out.println(">1");
+                        
+                        VideoForwardPacket v1=new VideoForwardPacket(
+                                socketVideo[1].getOutputStream(), 
+                                socketVideo[0].getInputStream(), 
+                                1);  //pair two client
+                        //VideoForwardPacket v2=new VideoForwardPacket(os1, is2, 1);
+                        Thread t1=new Thread(v1);
+                        //Thread t2=new Thread(v2);
+                        t1.start();
+                        //t2.start();
+                   
+                }
                 
                 
             }
