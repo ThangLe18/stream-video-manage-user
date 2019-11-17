@@ -1,6 +1,7 @@
 
-package manageUser;
+package Lib;
 
+import Lib.TypeProtocol;
 import java.io.Serializable;
 import java.net.Socket;
 

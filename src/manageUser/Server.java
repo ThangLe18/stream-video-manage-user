@@ -1,6 +1,11 @@
 package manageUser;
 
 
+import Lib.UserData;
+import Lib.UserState;
+import Lib.UserStateDataSend;
+import Lib.MessagePackage;
+import Lib.TypeProtocol;
 import ServerVideo.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

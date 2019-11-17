@@ -2,6 +2,9 @@
 package manageUser;
 
 
+import Lib.UserStateDataSend;
+import Lib.MessagePackage;
+import Lib.TypeProtocol;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
