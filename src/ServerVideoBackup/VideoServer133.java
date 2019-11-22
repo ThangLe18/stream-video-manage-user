@@ -61,8 +61,8 @@ public class VideoServer133
         // The available FrameGrabber classes include OpenCVFrameGrabber (opencv_videoio),
         // DC1394FrameGrabber, FlyCaptureFrameGrabber, OpenKinectFrameGrabber,
         // PS3EyeFrameGrabber, VideoInputFrameGrabber, and FFmpegFrameGrabber.
-        //OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(WEBCAM_DEVICE_INDEX);
-        FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("rtsp://admin:kiosk123@192.168.68.108");
+        OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(WEBCAM_DEVICE_INDEX);
+        //FFmpegFrameGrabber grabber = new FFmpegFrameGrabber("rtsp://admin:kiosk123@192.168.68.108");
         grabber.setImageWidth(captureWidth);
         grabber.setImageHeight(captureHeight);
         try {
@@ -75,6 +75,7 @@ public class VideoServer133
         ServerSocket ss=null;
         Socket scc=null;
         OutputStream os=null;
+        System.out.println("begin");
         try {
             ss=new ServerSocket(8888);
             System.out.println("Waiting for client...");
