@@ -44,12 +44,12 @@ public class Client implements Serializable{
         client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_CALL_VIDEO,"saddfsfgf","621873978"));
         client.sendMessage(new MessagePackage(TypeProtocol.ACCEPT_CALL_VIDEO,"forward","forward"));
     }
-    public void connectSocket(String srcID) throws IOException, InterruptedException{
+    public void connectSocket(String srcID,String username,String pw) throws IOException, InterruptedException{
         socket = new Socket("localhost", 7777);
         System.out.println("Connected!" + socket);
         outputStream = socket.getOutputStream();
         objectOutputStream = new ObjectOutputStream(outputStream);
-        sendMessage(new MessagePackage(TypeProtocol.REQUEST_CONNECT,"null",srcID,socket.getLocalPort()));
+        sendMessage(new MessagePackage(TypeProtocol.REQUEST_CONNECT,"null",srcID,socket.getLocalPort(),username,pw));
     }
     public void sendMessage(MessagePackage m) throws IOException, InterruptedException{
         System.out.println("Sending messages to the ServerSocket");

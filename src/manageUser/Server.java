@@ -93,6 +93,13 @@ public class Server implements Serializable{
                              
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_CONNECT){
                                  System.out.println(dataClient.getHeader());
+                                 System.out.println("username-password : "+ dataClient.getUsername()+"-"+dataClient.getPassword());
+                                 for(UserData ud : userData){
+                                     if(ud.userName.equals(dataClient.getUsername()) && ud.userPassword.equals(dataClient.getPassword())){
+                                         System.out.println("Name auth : "+ud.name);
+                                         dataClient.setSrcUid(ud.userID);
+                                     }
+                                 }
                                  System.out.println("source : " + dataClient.getSrcUid());
                                  System.out.println("Port : "+dataClient.getPort());
                                  int a = findIndexOfSocket(dataClient.getPort());

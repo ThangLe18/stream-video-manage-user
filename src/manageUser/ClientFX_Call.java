@@ -148,7 +148,7 @@ public class ClientFX_Call extends Application implements Serializable{
                     stage.setScene(scene2);
                     client = new Client();
                     try {
-                        client.connectSocket(currentUser.userID);
+                        client.connectSocket(currentUser.userID,userTextField.getText(), pwBox.getText());
                         client.listenFromServer();
                         Thread.sleep(1000);
                         for(UserStateDataSend ust : client.listUserStateDataSend){
