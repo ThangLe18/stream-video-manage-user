@@ -98,7 +98,6 @@ public class ClientFX_Call extends Application implements Serializable{
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
-        userData.add(new UserData("12347162", "m1","a", "12345678"));
         launch(args);
     }
     @Override
@@ -137,9 +136,7 @@ public class ClientFX_Call extends Application implements Serializable{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                UserData m = checkLogin("a", "12345678");
-                if(m != null) {
-                    currentUser = m;
+                    currentUser = new UserData("","","","");
                     nameUser.setText(currentUser.name);
                     stage.setScene(scene2);
                     client = new Client();
@@ -160,8 +157,6 @@ public class ClientFX_Call extends Application implements Serializable{
                         ready = true;
                         connectToVideoSocket();
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
-                }
-                else showMyAlert("Login Failed!");
             }
         });
         HBox hbBtn = new HBox(10);
@@ -491,14 +486,6 @@ public class ClientFX_Call extends Application implements Serializable{
         alert.showAndWait();
     }
     
-    public static UserData checkLogin(String username,String password){
-        for(UserData u : userData){
-            if(u.userName.equals(username) && u.userPassword.equals(password)){
-                return u;
-            }
-        }
-        return null;
-    }
     
     
     public static void connectToVideoSocket() throws IOException, InterruptedException{
