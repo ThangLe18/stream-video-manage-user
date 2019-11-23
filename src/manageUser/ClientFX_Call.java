@@ -99,10 +99,6 @@ public class ClientFX_Call extends Application implements Serializable{
         currentSelectedUserID = new String("");
         currentActivity = new String();
         userData.add(new UserData("12347162", "m1","a", "12345678"));
-        userData.add(new UserData("12341527", "m2","s", "12345678"));
-        userData.add(new UserData("66211343", "m3","d", "12345678"));
-        userData.add(new UserData("42211455", "m4","q", "12345678"));
-        userData.add(new UserData("55223114", "m5","w", "12345678"));
         launch(args);
     }
     @Override
@@ -141,7 +137,7 @@ public class ClientFX_Call extends Application implements Serializable{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                UserData m = checkLogin(userTextField.getText(), pwBox.getText());
+                UserData m = checkLogin("a", "12345678");
                 if(m != null) {
                     currentUser = m;
                     nameUser.setText(currentUser.name);
@@ -151,6 +147,13 @@ public class ClientFX_Call extends Application implements Serializable{
                         client.connectSocket(currentUser.userID,userTextField.getText(), pwBox.getText());
                         client.listenFromServer();
                         Thread.sleep(1000);
+                        for(UserStateDataSend ad : client.listUserStateDataSend){
+                            if(ad.getUsername_login().equals(userTextField.getText()))
+                            {currentUser = new UserData(ad.getUserID(), ad.getUserName(),"","");
+                                nameUser.setText(currentUser.name);
+                            }
+                        }
+                        System.out.println("username_login : " + client.listUserStateDataSend.get(0).getUsername_login());
                         for(UserStateDataSend ust : client.listUserStateDataSend){
                             listView.getItems().add(ust.userName);
                         }
@@ -405,7 +408,7 @@ public class ClientFX_Call extends Application implements Serializable{
         listView.getItems().add("----ListUserOnline----");
         listView.getItems().add("----ListUserOnline----");
         for(UserStateDataSend u2 : client.listUserStateDataSend ){
-            if(!u2.userName.equals(currentUser.name)) listView.getItems().add(u2.userName+ "-" + u2.username_login);
+            if(!u2.userName.equals(currentUser.name)) listView.getItems().add(u2.userName);
         }
     }
     
