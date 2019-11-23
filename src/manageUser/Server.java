@@ -112,7 +112,7 @@ public class Server implements Serializable{
                                          new ObjectOutputStream(socket[a].getOutputStream())
                                  ));
                                  listUserState2.add(new UserStateDataSend(dataClient.getSrcUid(), 
-                                         findUsernameByID(dataClient.getSrcUid()),"free",null
+                                         findUsernameByID(dataClient.getSrcUid()),"free",null,dataClient.getUsername()
                                  ));
                                  System.out.println("listuserstate2 : " + listUserState2.size());
                                  sendStateToClient();

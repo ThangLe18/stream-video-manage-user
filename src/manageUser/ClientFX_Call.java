@@ -405,7 +405,7 @@ public class ClientFX_Call extends Application implements Serializable{
         listView.getItems().add("----ListUserOnline----");
         listView.getItems().add("----ListUserOnline----");
         for(UserStateDataSend u2 : client.listUserStateDataSend ){
-            if(!u2.userName.equals(currentUser.name)) listView.getItems().add(u2.userName);
+            if(!u2.userName.equals(currentUser.name)) listView.getItems().add(u2.userName+ "-" + u2.username_login);
         }
     }
     

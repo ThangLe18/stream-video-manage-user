@@ -19,6 +19,23 @@ public class UserStateDataSend implements Serializable{
     public String userName;
     public String state;
     public String desID;
+    public String username_login;
+
+    public UserStateDataSend(String userID, String userName, String state, String desID, String username_login) {
+        this.userID = userID;
+        this.userName = userName;
+        this.state = state;
+        this.desID = desID;
+        this.username_login = username_login;
+    }
+
+    public String getUsername_login() {
+        return username_login;
+    }
+
+    public void setUsername_login(String username_login) {
+        this.username_login = username_login;
+    }
 
     public UserStateDataSend(String userID, String userName, String state, String desID) {
         this.userID = userID;
