@@ -98,11 +98,11 @@ public class ClientFX_Call extends Application implements Serializable{
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
-        userData.add(new UserData("12347162", "Mickey Jr","a", "12345678"));
-        userData.add(new UserData("12341527", "Rancix Sr","s", "12345678"));
-        userData.add(new UserData("66211343", "Aslhycole","d", "12345678"));
-        userData.add(new UserData("42211455", "Micl Owen","q", "12345678"));
-        userData.add(new UserData("55223114", "FrLampard","w", "12345678"));
+        userData.add(new UserData("12347162", "m1","a", "12345678"));
+        userData.add(new UserData("12341527", "m2","s", "12345678"));
+        userData.add(new UserData("66211343", "m3","d", "12345678"));
+        userData.add(new UserData("42211455", "m4","q", "12345678"));
+        userData.add(new UserData("55223114", "m5","w", "12345678"));
         launch(args);
     }
     @Override
