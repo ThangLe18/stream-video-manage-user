@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 
 public class Client implements Serializable{
+    public static Config config = new Config();
     public Socket socket;
     public OutputStream outputStream;
     public InputStream inputStream;
@@ -45,14 +46,14 @@ public class Client implements Serializable{
         client.sendMessage(new MessagePackage(TypeProtocol.ACCEPT_CALL_VIDEO,"forward","forward"));
     }
     public void connectSocket(String srcID,String username,String pw) throws IOException, InterruptedException{
-        socket = new Socket("localhost", 7777);
+        socket = new Socket(config.urlServer, config.clientControllerSocket);
         System.out.println("Connected!" + socket);
         outputStream = socket.getOutputStream();
         objectOutputStream = new ObjectOutputStream(outputStream);
         sendMessage(new MessagePackage(TypeProtocol.REQUEST_CONNECT,"null",srcID,socket.getLocalPort(),username,pw));
     }
     public void signup(String username,String pw) throws IOException, InterruptedException{
-        socket = new Socket("localhost", 7777);
+        socket = new Socket(config.urlServer, config.clientControllerSocket);
         System.out.println("Connected!" + socket);
         outputStream = socket.getOutputStream();
         objectOutputStream = new ObjectOutputStream(outputStream);

@@ -37,7 +37,11 @@ public class Server implements Serializable{
     public ObjectOutputStream objectOutputStream;
     public ArrayList<UserState> listUserState = new ArrayList<>();
     public ArrayList<UserStateDataSend> listUserState2 = new ArrayList<>();
+    public static Config config;
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+        
+        config = new Config();
+        
         accessDatabase = new AccessDatabase();
         accessDatabase.getListUserFromDB();
         
@@ -57,7 +61,7 @@ public class Server implements Serializable{
     
     
     public void createServerSocket() throws IOException{
-        ss = new ServerSocket(7777);
+        ss = new ServerSocket(config.serverControllerSocket);
         System.out.println("Created Controller socket!");
     }
     
@@ -117,32 +121,8 @@ public class Server implements Serializable{
                              
                              
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_SIGNUP){
-//                                 System.out.println(dataClient.getHeader());
-//                                 System.out.println("username-password : "+ dataClient.getUsername()+"-"+dataClient.getPassword());
-//                                 for(UserData ud : accessDatabase.userData){
-//                                     if(ud.userName.equals(dataClient.getUsername()) && ud.userPassword.equals(dataClient.getPassword())){
-//                                         System.out.println("Name auth : "+ud.name);
-//                                         dataClient.setSrcUid(ud.userID);
-//                                     }
-//                                 }
-//                                 System.out.println("source : " + dataClient.getSrcUid());
-//                                 System.out.println("Port : "+dataClient.getPort());
-//                                 int a = findIndexOfSocket(dataClient.getPort());
-//                                 System.out.println("find port : "+a);
-//                                 listUserState.add(new UserState(dataClient.getSrcUid(), 
-//                                         findUsernameByID(dataClient.getSrcUid()),
-//                                         socket[a].getInputStream(),
-//                                         socket[a].getOutputStream(),
-//                                         null,null,"free",null,
-//                                         new ObjectOutputStream(socket[a].getOutputStream())
-//                                 ));
-//                                 listUserState2.add(new UserStateDataSend(dataClient.getSrcUid(), 
-//                                         findUsernameByID(dataClient.getSrcUid()),"free",null,dataClient.getUsername()
-//                                 ));
-//                                 System.out.println("listuserstate2 : " + listUserState2.size());
-//                                 sendStateToClient();
-                                   
-                                   accessDatabase.addUserToDatabase(dataClient.getUsername(),dataClient.getPassword());
+                                 accessDatabase.addUserToDatabase(dataClient.getUsername(),dataClient.getPassword());
+                                 accessDatabase.refreshDatabase();
                              }
                              
                              
@@ -303,7 +283,7 @@ public class Server implements Serializable{
     
     public static void startVideoServer() throws IOException{
 
-        ss_video=new ServerSocket(5555);
+        ss_video=new ServerSocket(config.serverVideoSocket);
         socketVideo = new Socket[20];
         ServerSocket ss=null;
         socketnumberVideo = -1;

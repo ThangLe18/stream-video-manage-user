@@ -52,16 +52,18 @@ public class AccessDatabase {
       }
     }
     public static void addUserToDatabase(String userName,String userPassword) {
-      MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
-      DB db = mongo.getDB( "StreamVideo" );
-      DBCollection collection = db.getCollection("Users");
-      
-      
-      BasicDBObject document = new BasicDBObject();
-      document.put("userID", 1);
-      document.put("name", "example");
-      document.put("userName", userName);
-      document.put("userPassword", userPassword);
-      collection.insert(document);
+        MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
+        DB db = mongo.getDB( "StreamVideo" );
+        DBCollection collection = db.getCollection("Users");
+        BasicDBObject document = new BasicDBObject();
+        document.put("userID", 1);
+        document.put("name", userName);
+        document.put("userName", userName);
+        document.put("userPassword", userPassword);
+        collection.insert(document);
+    }
+    public static void refreshDatabase(){
+        userData.clear();
+        getListUserFromDB();
     }
 }

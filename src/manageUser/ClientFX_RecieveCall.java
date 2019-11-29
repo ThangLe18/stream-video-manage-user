@@ -57,6 +57,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
+import static manageUser.ClientFX_Call.startStream;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
@@ -89,13 +90,9 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
     public static VideoClientFXWebcam_Client1 startUpTest;
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
+    public static Config config;
     public static void main(String[] args) {
-        
-        
-        
-        
-        
-        
+        config = new Config();
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
@@ -163,7 +160,34 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
+        grid.add(hbBtn, 0, 4);
+        
+        
+        
+        
+        Button btn_signup = new Button("Sign up");
+        btn_signup.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Client client_signup = new Client();
+                try {
+                    client_signup.signup(userTextField.getText(), pwBox.getText());
+                } catch (IOException ex) {
+                    Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        HBox hbBtn_signup = new HBox(10);
+        hbBtn_signup.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn_signup.getChildren().add(btn_signup);
+        grid.add(btn_signup, 1, 4);
+        
+        
+        
+        
+        
         stage.show();
         
         
@@ -490,7 +514,7 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
     
     
     public static void connectToVideoSocket() throws IOException, InterruptedException{
-        socketVideo = new Socket("localhost", 5555);
+        socketVideo = new Socket(config.urlServer, config.clientVideoSocket);
         System.out.println("Connected!" + socketVideo);
         client.sendMessage(new MessagePackage(TypeProtocol.SAVE_SOCKET_VIDEO,
                             "null", currentUser.userID, socketVideo.getLocalPort()));
@@ -502,6 +526,7 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
                client.sendMessage(new MessagePackage(TypeProtocol.REQUEST_LOGOUT, currentUser.userID));
          } catch (IOException ex) {} catch (InterruptedException ex) {}
     }
+    
     
     
     

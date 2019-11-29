@@ -88,13 +88,9 @@ public class ClientFX_Call extends Application implements Serializable{
     public static VideoClientFXWebcam_Client1 startUpTest;
     boolean ready = false;
     public static ArrayList<UserData> userData = new ArrayList<>();
+    public static Config config;
     public static void main(String[] args) {
-        
-        
-        
-        
-        
-        
+        config = new Config();
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
@@ -516,7 +512,7 @@ public class ClientFX_Call extends Application implements Serializable{
     
     
     public static void connectToVideoSocket() throws IOException, InterruptedException{
-        socketVideo = new Socket("localhost", 5555);
+        socketVideo = new Socket(config.urlServer, config.clientVideoSocket);
         System.out.println("Connected!" + socketVideo);
         client.sendMessage(new MessagePackage(TypeProtocol.SAVE_SOCKET_VIDEO,
                             "null", currentUser.userID, socketVideo.getLocalPort()));
