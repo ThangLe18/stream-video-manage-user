@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -74,13 +75,13 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
     public static Button btn_acceptcall;
     public static Button btn_rejectcall;
     public static Button btn_logout;
-    public static Button btn_displayvideo;
     public static Text activity;
     public static ListView<String> listView;
     public static UserData currentUser;
     public static String currentSelectedUser;
     public static String currentSelectedUserID;
     public static Client client;
+    public static Button btn_displayvideo;
     public static String currentActivity;
     public static Stage stage,stage2;
     private static volatile Thread playThread;
@@ -98,11 +99,6 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
         currentSelectedUser = new String("");
         currentSelectedUserID = new String("");
         currentActivity = new String();
-        userData.add(new UserData("12347162", "Mickey Jr","a", "12345678"));
-        userData.add(new UserData("12341527", "Rancix Sr","s", "12345678"));
-        userData.add(new UserData("66211343", "Aslhycole","d", "12345678"));
-        userData.add(new UserData("42211455", "Micl Owen","q", "12345678"));
-        userData.add(new UserData("55223114", "FrLampard","w", "12345678"));
         launch(args);
     }
     @Override
@@ -141,26 +137,27 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                UserData m = checkLogin(userTextField.getText(), pwBox.getText());
-                if(m != null) {
-                    currentUser = m;
+                    currentUser = new UserData("","","","");
                     nameUser.setText(currentUser.name);
                     stage.setScene(scene2);
                     client = new Client();
                     try {
-                        client.connectSocket(currentUser.userID);
+                        client.connectSocket(currentUser.userID,userTextField.getText(), pwBox.getText());
                         client.listenFromServer();
                         Thread.sleep(1000);
+                        for(UserStateDataSend ad : client.listUserStateDataSend){
+                            if(ad.getUsername_login().equals(userTextField.getText()))
+                            {currentUser = new UserData(ad.getUserID(), ad.getUserName(),"","");
+                                nameUser.setText(currentUser.name);
+                            }
+                        }
+                        System.out.println("username_login : " + client.listUserStateDataSend.get(0).getUsername_login());
                         for(UserStateDataSend ust : client.listUserStateDataSend){
                             listView.getItems().add(ust.userName);
                         }
                         ready = true;
                         connectToVideoSocket();
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
-                }
-                else showMyAlert("Login Failed!");
-           
-                
             }
         });
         HBox hbBtn = new HBox(10);
@@ -326,7 +323,7 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
                     startStream();
                 } catch (IOException ex) {
                     Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
-                }     
+                }    
             }
         });
         HBox hbBtn_displayvideo = new HBox(10);
@@ -490,14 +487,6 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
         alert.showAndWait();
     }
     
-    public static UserData checkLogin(String username,String password){
-        for(UserData u : userData){
-            if(u.userName.equals(username) && u.userPassword.equals(password)){
-                return u;
-            }
-        }
-        return null;
-    }
     
     
     public static void connectToVideoSocket() throws IOException, InterruptedException{
