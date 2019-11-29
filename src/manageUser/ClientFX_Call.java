@@ -162,7 +162,34 @@ public class ClientFX_Call extends Application implements Serializable{
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
+        grid.add(hbBtn, 0, 4);
+        
+        
+        
+        
+        Button btn_signup = new Button("Sign up");
+        btn_signup.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Client client_signup = new Client();
+                try {
+                    client_signup.signup(userTextField.getText(), pwBox.getText());
+                } catch (IOException ex) {
+                    Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        HBox hbBtn_signup = new HBox(10);
+        hbBtn_signup.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn_signup.getChildren().add(btn_signup);
+        grid.add(btn_signup, 1, 4);
+        
+        
+        
+        
+        
         stage.show();
         
         

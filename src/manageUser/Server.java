@@ -115,6 +115,37 @@ public class Server implements Serializable{
                              }
                              
                              
+                             
+                             if(dataClient.getHeader()== TypeProtocol.REQUEST_SIGNUP){
+//                                 System.out.println(dataClient.getHeader());
+//                                 System.out.println("username-password : "+ dataClient.getUsername()+"-"+dataClient.getPassword());
+//                                 for(UserData ud : accessDatabase.userData){
+//                                     if(ud.userName.equals(dataClient.getUsername()) && ud.userPassword.equals(dataClient.getPassword())){
+//                                         System.out.println("Name auth : "+ud.name);
+//                                         dataClient.setSrcUid(ud.userID);
+//                                     }
+//                                 }
+//                                 System.out.println("source : " + dataClient.getSrcUid());
+//                                 System.out.println("Port : "+dataClient.getPort());
+//                                 int a = findIndexOfSocket(dataClient.getPort());
+//                                 System.out.println("find port : "+a);
+//                                 listUserState.add(new UserState(dataClient.getSrcUid(), 
+//                                         findUsernameByID(dataClient.getSrcUid()),
+//                                         socket[a].getInputStream(),
+//                                         socket[a].getOutputStream(),
+//                                         null,null,"free",null,
+//                                         new ObjectOutputStream(socket[a].getOutputStream())
+//                                 ));
+//                                 listUserState2.add(new UserStateDataSend(dataClient.getSrcUid(), 
+//                                         findUsernameByID(dataClient.getSrcUid()),"free",null,dataClient.getUsername()
+//                                 ));
+//                                 System.out.println("listuserstate2 : " + listUserState2.size());
+//                                 sendStateToClient();
+                                   
+                                   accessDatabase.addUserToDatabase(dataClient.getUsername(),dataClient.getPassword());
+                             }
+                             
+                             
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_LOGOUT){
                                  int a = findIndexOfUserByUserID(dataClient.getSrcUid());
                                  listUserState.remove(a);

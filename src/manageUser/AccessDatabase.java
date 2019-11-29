@@ -6,6 +6,7 @@
 package manageUser;
 
 import Lib.UserData;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -29,6 +30,7 @@ public class AccessDatabase {
     public static void main(String[] args) {
         AccessDatabase m = new AccessDatabase();
         m.getListUserFromDB();
+        m.addUserToDatabase("test", "test");
     }
     public static void getListUserFromDB() {
       MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
@@ -48,5 +50,18 @@ public class AccessDatabase {
                   dbObject.get("userName").toString(), 
                   dbObject.get("userPassword").toString()));
       }
+    }
+    public static void addUserToDatabase(String userName,String userPassword) {
+      MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
+      DB db = mongo.getDB( "StreamVideo" );
+      DBCollection collection = db.getCollection("Users");
+      
+      
+      BasicDBObject document = new BasicDBObject();
+      document.put("userID", 1);
+      document.put("name", "example");
+      document.put("userName", userName);
+      document.put("userPassword", userPassword);
+      collection.insert(document);
     }
 }

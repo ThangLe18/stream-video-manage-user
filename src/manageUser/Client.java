@@ -51,6 +51,13 @@ public class Client implements Serializable{
         objectOutputStream = new ObjectOutputStream(outputStream);
         sendMessage(new MessagePackage(TypeProtocol.REQUEST_CONNECT,"null",srcID,socket.getLocalPort(),username,pw));
     }
+    public void signup(String username,String pw) throws IOException, InterruptedException{
+        socket = new Socket("localhost", 7777);
+        System.out.println("Connected!" + socket);
+        outputStream = socket.getOutputStream();
+        objectOutputStream = new ObjectOutputStream(outputStream);
+        sendMessage(new MessagePackage(TypeProtocol.REQUEST_SIGNUP,"null","null",socket.getLocalPort(),username,pw));
+    }
     public void sendMessage(MessagePackage m) throws IOException, InterruptedException{
         System.out.println("Sending messages to the ServerSocket");
         objectOutputStream.writeObject(m);
