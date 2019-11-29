@@ -30,22 +30,16 @@ public class Server implements Serializable{
     public static Socket[] socket,socketVideo;
     public static int socketnumber = -1;
     public static int socketnumberVideo = -1;
+    public static AccessDatabase accessDatabase;
     public OutputStream[] outputStreamList;
     public ObjectOutputStream[] objectOutputStreamList;
     public OutputStream outputStream;
     public ObjectOutputStream objectOutputStream;
-    public static ArrayList<UserData> userData = new ArrayList<>();
     public ArrayList<UserState> listUserState = new ArrayList<>();
     public ArrayList<UserStateDataSend> listUserState2 = new ArrayList<>();
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        AccessDatabase accessDatabase = new AccessDatabase();
+        accessDatabase = new AccessDatabase();
         accessDatabase.getListUserFromDB();
-        //login information
-        userData.add(new UserData("12347162", "Mickey Jr","a", "12345678"));
-        userData.add(new UserData("12341527", "Rancix Sr","s", "12345678"));
-        userData.add(new UserData("66211343", "Aslhycole","d", "12345678"));
-        userData.add(new UserData("42211455", "Micl Owen","q", "12345678"));
-        userData.add(new UserData("55223114", "FrLampard","w", "12345678"));
         
         new Thread(new Runnable() {
                 @Override
@@ -96,7 +90,7 @@ public class Server implements Serializable{
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_CONNECT){
                                  System.out.println(dataClient.getHeader());
                                  System.out.println("username-password : "+ dataClient.getUsername()+"-"+dataClient.getPassword());
-                                 for(UserData ud : userData){
+                                 for(UserData ud : accessDatabase.userData){
                                      if(ud.userName.equals(dataClient.getUsername()) && ud.userPassword.equals(dataClient.getPassword())){
                                          System.out.println("Name auth : "+ud.name);
                                          dataClient.setSrcUid(ud.userID);
@@ -235,7 +229,7 @@ public class Server implements Serializable{
     }
     
     public String findUsernameByID(String id){
-        for(UserData u : userData){
+        for(UserData u : accessDatabase.userData){
             if(u.userID.equals(id))
                 return u.name;
         }
