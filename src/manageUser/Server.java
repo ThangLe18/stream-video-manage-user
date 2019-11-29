@@ -38,6 +38,8 @@ public class Server implements Serializable{
     public ArrayList<UserState> listUserState = new ArrayList<>();
     public ArrayList<UserStateDataSend> listUserState2 = new ArrayList<>();
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+        AccessDatabase accessDatabase = new AccessDatabase();
+        accessDatabase.getListUserFromDB();
         //login information
         userData.add(new UserData("12347162", "Mickey Jr","a", "12345678"));
         userData.add(new UserData("12341527", "Rancix Sr","s", "12345678"));
