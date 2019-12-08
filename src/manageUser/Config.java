@@ -14,7 +14,8 @@ package manageUser;
 // signup that bai
 // login that bai
 // viet ham gui cho chinh user do
-
+// MD5
+// mongo co authentication
 public class Config {
     // Server
     public int serverControllerSocket = 7777;

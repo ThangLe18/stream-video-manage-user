@@ -12,7 +12,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,14 +53,15 @@ public class Client implements Serializable{
         System.out.println("Connected!" + socket);
         outputStream = socket.getOutputStream();
         objectOutputStream = new ObjectOutputStream(outputStream);
-        sendMessage(new MessagePackage(TypeProtocol.REQUEST_CONNECT,"null",srcID,socket.getLocalPort(),username,pw));
+        sendMessage(new MessagePackage(TypeProtocol.REQUEST_CONNECT,"null",srcID,socket.getLocalPort(),username,getMd5(pw)));
     }
     public void signup(String username,String pw) throws IOException, InterruptedException{
         socket = new Socket(config.urlServer, config.clientControllerSocket);
         System.out.println("Connected!" + socket);
         outputStream = socket.getOutputStream();
         objectOutputStream = new ObjectOutputStream(outputStream);
-        sendMessage(new MessagePackage(TypeProtocol.REQUEST_SIGNUP,"null","null",socket.getLocalPort(),username,pw));
+        String pw_hash = getMd5(pw);
+        sendMessage(new MessagePackage(TypeProtocol.REQUEST_SIGNUP,"null","null",socket.getLocalPort(),username,pw_hash));
     }
     public void sendMessage(MessagePackage m) throws IOException, InterruptedException{
         System.out.println("Sending messages to the ServerSocket");
@@ -87,5 +91,27 @@ public class Client implements Serializable{
                 }
             }).start();   
     }
+    public static String getMd5(String input) 
+    { 
+        try { 
+            // Static getInstance method is called with hashing MD5 
+            MessageDigest md = MessageDigest.getInstance("MD5"); 
+            // digest() method is called to calculate message digest 
+            //  of an input digest() return array of byte 
+            byte[] messageDigest = md.digest(input.getBytes()); 
+            // Convert byte array into signum representation 
+            BigInteger no = new BigInteger(1, messageDigest); 
+            // Convert message digest into hex value 
+            String hashtext = no.toString(16); 
+            while (hashtext.length() < 32) { 
+                hashtext = "0" + hashtext; 
+            } 
+            return hashtext; 
+        }  
+        // For specifying wrong message digest algorithms 
+        catch (NoSuchAlgorithmException e) { 
+            throw new RuntimeException(e); 
+        } 
+    } 
 }
 
