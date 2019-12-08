@@ -123,6 +123,7 @@ public class Server implements Serializable{
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_SIGNUP){
                                  accessDatabase.addUserToDatabase(dataClient.getUsername(),dataClient.getPassword());
                                  accessDatabase.refreshDatabase();
+                                 sendInformToClient(findIndexOfSocket(dataClient.getPort()),"Signup successfully!");
                              }
                              
                              
@@ -136,6 +137,7 @@ public class Server implements Serializable{
                              
                              
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_CALL_VIDEO){
+                                 //sendInformToClient(findIndexOfSocket(dataClient.getPort()),"OK CALL NOW");
                                  int a = findIndexOfUserByUserID(dataClient.getSrcUid());
                                  int b = findIndexOfUserByUserID(dataClient.getDestUid());
                                  //listUserState.get(a)
@@ -225,8 +227,6 @@ public class Server implements Serializable{
                                  for(UserState us : listUserState){
                                      System.out.println("this port : "+ us.getVideo_os());
                                  }
-                                 
-                                
                              }
                              
                          } 
@@ -280,6 +280,13 @@ public class Server implements Serializable{
                u.ctr_oos.writeObject(listUserState2);
            }
         }
+    
+    public static void sendInformToClient(int indexOfSocket,String inform) throws IOException{
+        OutputStream outputStream13 = socket[indexOfSocket].getOutputStream();
+        DataOutputStream dataOutputStream13 = new DataOutputStream(outputStream13);
+        dataOutputStream13.writeUTF(inform);
+        dataOutputStream13.flush();
+    }
     
     public static void startVideoServer() throws IOException{
 

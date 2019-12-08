@@ -5,6 +5,7 @@ package manageUser;
 import Lib.UserStateDataSend;
 import Lib.MessagePackage;
 import Lib.TypeProtocol;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +33,7 @@ public class Client implements Serializable{
     public static String currentActivity;
     public ArrayList<UserStateDataSend> listUserStateDataSend = new ArrayList<>();
     public boolean updateState = false;
+    public static String inform_from_server = new String("p");
 
     public boolean isUpdateState() {
         return updateState;
@@ -67,6 +69,24 @@ public class Client implements Serializable{
         System.out.println("Sending messages to the ServerSocket");
         objectOutputStream.writeObject(m);
         Thread.sleep(200);
+    }
+    public void listenFromServer_inform() throws IOException{
+        currentActivity = new String();
+        InputStream inputStream = socket.getInputStream();
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        new Thread(new Runnable() {
+                @Override
+                public void run()
+                {
+                     while(true){
+                         try {
+                            inform_from_server = new String(dataInputStream.readUTF());
+                            System.out.println("The message sent from the socket was: " + inform_from_server);
+                         } 
+                         catch (IOException ex) {System.out.println(ex);}
+                     }
+                }
+            }).start();   
     }
     public void listenFromServer() throws IOException{
         currentActivity = new String();

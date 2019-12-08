@@ -170,6 +170,9 @@ public class ClientFX_Call extends Application implements Serializable{
                 Client client_signup = new Client();
                 try {
                     client_signup.signup(userTextField.getText(), pwBox.getText());
+                    client_signup.listenFromServer_inform();
+                    Thread.sleep(1000);
+                    showMyAlert(client_signup.inform_from_server);
                 } catch (IOException ex) {
                     Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
