@@ -51,6 +51,14 @@ public class AccessDatabase {
                   dbObject.get("userPassword").toString()));
       }
     }
+    public static boolean checkExistUser(String userName) {
+        MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
+        DB db = mongo.getDB( "StreamVideo" );
+        DBCollection collection = db.getCollection("Users");
+        DBObject findUser = collection.findOne(new BasicDBObject("userName", userName));
+        if(findUser != null) return true;
+        return false;
+    }
     public static void addUserToDatabase(String userName,String userPassword) {
         MongoClient mongo = new MongoClient( "localhost" , 27017 ); 
         DB db = mongo.getDB( "StreamVideo" );

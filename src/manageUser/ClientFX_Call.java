@@ -132,6 +132,10 @@ public class ClientFX_Call extends Application implements Serializable{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                if(userTextField.getText().toString().equals("") || pwBox.getText().toString().equals(""))
+                    showMyAlert("Please check username or password!");
+                else
+                {
                     currentUser = new UserData("","","","");
                     nameUser.setText(currentUser.name);
                     stage.setScene(scene2);
@@ -139,7 +143,9 @@ public class ClientFX_Call extends Application implements Serializable{
                     try {
                         client.connectSocket(currentUser.userID,userTextField.getText(), pwBox.getText());
                         client.listenFromServer();
+                        //client.listenFromServer_inform();
                         Thread.sleep(1000);
+                        //showMyAlert(client.inform_from_server);
                         for(UserStateDataSend ad : client.listUserStateDataSend){
                             if(ad.getUsername_login().equals(userTextField.getText()))
                             {currentUser = new UserData(ad.getUserID(), ad.getUserName(),"","");
@@ -153,6 +159,8 @@ public class ClientFX_Call extends Application implements Serializable{
                         ready = true;
                         connectToVideoSocket();
                     } catch (IOException ex) {} catch (InterruptedException ex) {}
+                
+                }
             }
         });
         HBox hbBtn = new HBox(10);

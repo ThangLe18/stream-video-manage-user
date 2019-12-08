@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -57,7 +56,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
-import static manageUser.ClientFX_Call.startStream;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
@@ -172,6 +170,9 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
                 Client client_signup = new Client();
                 try {
                     client_signup.signup(userTextField.getText(), pwBox.getText());
+                    client_signup.listenFromServer_inform();
+                    Thread.sleep(1000);
+                    showMyAlert(client_signup.inform_from_server);
                 } catch (IOException ex) {
                     Logger.getLogger(ClientFX_Call.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {

@@ -121,9 +121,14 @@ public class Server implements Serializable{
                              
                              
                              if(dataClient.getHeader()== TypeProtocol.REQUEST_SIGNUP){
-                                 accessDatabase.addUserToDatabase(dataClient.getUsername(),dataClient.getPassword());
-                                 accessDatabase.refreshDatabase();
-                                 sendInformToClient(findIndexOfSocket(dataClient.getPort()),"Signup successfully!");
+                                 if(accessDatabase.checkExistUser(dataClient.getUsername())==false){
+                                     accessDatabase.addUserToDatabase(dataClient.getUsername(),dataClient.getPassword());
+                                     accessDatabase.refreshDatabase();
+                                     sendInformToClient(findIndexOfSocket(dataClient.getPort()),"Signup successfully!");
+                                 }
+                                 else{
+                                     sendInformToClient(findIndexOfSocket(dataClient.getPort()),"UserName is already used!");
+                                 }
                              }
                              
                              
