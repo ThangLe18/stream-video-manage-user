@@ -16,7 +16,7 @@ public class Config {
     public int serverVideoSocket = 5555;
     
     // Client
-    public String urlServer = "";
+    public String urlServer = "localhost";
     public int clientControllerSocket = 7777;
     public int clientVideoSocket = 5555;
 
