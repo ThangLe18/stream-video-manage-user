@@ -82,7 +82,7 @@ public class VideoAudioWriterWebcam implements Runnable
                 os,
                 captureWidth, captureHeight, audioChannels);
         
-        recorder.setVideoCodec(avcodec.AV_CODEC_ID_MPEG2VIDEO);
+        recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
         recorder.setFormat("mpegts");
         // FPS (frames per second)
         recorder.setFrameRate(FRAME_RATE);

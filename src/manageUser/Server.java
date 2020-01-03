@@ -211,14 +211,14 @@ public class Server implements Serializable{
                                         socketVideo[a].getOutputStream(), 
                                         socketVideo[b].getInputStream(), 
                                         1);  
-                                 VideoForwardPacket v2=new VideoForwardPacket(
-                                        socketVideo[b].getOutputStream(), 
-                                        socketVideo[a].getInputStream(), 
-                                        1);
+//                                 VideoForwardPacket v2=new VideoForwardPacket(
+//                                        socketVideo[b].getOutputStream(), 
+//                                        socketVideo[a].getInputStream(), 
+//                                        1);
                                  Thread t1=new Thread(v1);
-                                 Thread t2=new Thread(v2);
+                                 //Thread t2=new Thread(v2);
                                  t1.start();
-                                 t2.start();
+                                 //t2.start();
                              }
                              
                              
