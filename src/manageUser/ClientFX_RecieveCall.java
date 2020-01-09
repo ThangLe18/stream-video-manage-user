@@ -566,12 +566,12 @@ public class ClientFX_RecieveCall extends Application implements Serializable{
                     grabber.start();
                     primaryStage.setWidth(grabber.getImageWidth());
                     primaryStage.setHeight(grabber.getImageHeight());
-                    final AudioFormat audioFormat = new AudioFormat(grabber.getSampleRate(), 16, grabber.getAudioChannels(), true, true);
+                    //final AudioFormat audioFormat = new AudioFormat(grabber.getSampleRate(), 16, grabber.getAudioChannels(), true, true);
 
-                    final DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-                    final SourceDataLine soundLine = (SourceDataLine) AudioSystem.getLine(info);
-                    soundLine.open(audioFormat);
-                    soundLine.start();
+                    //final DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+                    //final SourceDataLine soundLine = (SourceDataLine) AudioSystem.getLine(info);
+                    //soundLine.open(audioFormat);
+                    //soundLine.start();
 
                     final Java2DFrameConverter converter = new Java2DFrameConverter();
 

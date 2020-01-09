@@ -46,7 +46,7 @@ public class VideoForwardPacket implements Runnable{
         int captureHeight = 320;
         FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(
                 os,
-                captureWidth, captureHeight, audioChannels);
+                captureWidth, captureHeight);
         
 //        recorder.setInterleaved(true);
 //        recorder.setVideoOption("tune", "zerolatency");
@@ -62,13 +62,13 @@ public class VideoForwardPacket implements Runnable{
         // FPS (frames per second)
         recorder.setFrameRate(FRAME_RATE);
         recorder.setGopSize(GOP_LENGTH_IN_FRAMES);
-        recorder.setAudioOption("crf", "0");
+        //recorder.setAudioOption("crf", "0");
         // Highest quality
-        recorder.setAudioQuality(0);
-        recorder.setAudioBitrate(44000);
+        //recorder.setAudioQuality(0);
+        //recorder.setAudioBitrate(44000);
         recorder.setSampleRate(22050);
-        recorder.setAudioChannels(audioChannels);
-        recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
+        //recorder.setAudioChannels(audioChannels);
+        //recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
         try {
             grabber.start();
             recorder.start(grabber.getFormatContext());

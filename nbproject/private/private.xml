@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/manageUser/Test.java</file>
-            <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/javacv150/AudioWriter.java</file>
+            <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/manageUser/ClientFX_RecieveCall.java</file>
+            <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/manageUser/Config.java</file>
             <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/manageUser/Server.java</file>
-            <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/ServerVideo/VideoAudioWriterWebcam.java</file>
-            <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/manageUser/Client.java</file>
             <file>file:/F:/streamvideo-20191004T021506Z-001/javacv150_lan2/javacv150/src/manageUser/ClientFX_Call.java</file>
         </group>
     </open-files>

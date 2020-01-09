@@ -87,7 +87,7 @@ public class VideoAudioWriterWebcam implements Runnable
         // FPS (frames per second)
         recorder.setFrameRate(FRAME_RATE);
         recorder.setGopSize(GOP_LENGTH_IN_FRAMES);
-        recorder.setAudioOption("crf", "0");
+        //recorder.setAudioOption("crf", "0");
         
         // Highest quality
         if(audioChannels>0)
@@ -100,8 +100,8 @@ public class VideoAudioWriterWebcam implements Runnable
         }
         try {
             recorder.start();
-            aw=new AudioWriter(recorder);
-            audioThread=new Thread(aw);
+            //aw=new AudioWriter(recorder);
+            //audioThread=new Thread(aw);
         } catch (Exception ex) {
             Logger.getLogger(VideoAudioWriterWebcam.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -115,7 +115,7 @@ public class VideoAudioWriterWebcam implements Runnable
         CanvasFrame cFrame = new CanvasFrame("Capture Preview", CanvasFrame.getDefaultGamma() / grabber.getGamma());
         Frame capturedFrame = null;
         // While we are capturing...
-        audioThread.start();
+        //audioThread.start();
         while (true)
         {
             try {
@@ -154,7 +154,7 @@ public class VideoAudioWriterWebcam implements Runnable
             cFrame.dispose();
             recorder.stop();
             grabber.stop();
-            audioThread.stop();
+            //audioThread.stop();
         } catch (Exception ex) {
             Logger.getLogger(VideoAudioWriterWebcam.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FrameGrabber.Exception ex) {

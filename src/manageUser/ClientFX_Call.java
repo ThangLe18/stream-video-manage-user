@@ -565,7 +565,7 @@ public class ClientFX_Call extends Application implements Serializable{
         OutputStream os=socketVideo.getOutputStream();
         System.out.println("Connected to server, start playing...");
         
-        VideoAudioWriterWebcam v1=new VideoAudioWriterWebcam(os, 0, 1);
+        VideoAudioWriterWebcam v1=new VideoAudioWriterWebcam(os, 0, 0);
         Thread t1=new Thread(v1);
         t1.start();
         playThread = new Thread(new Runnable() {

@@ -10,6 +10,7 @@ package manageUser;
  * @author ThayLe
  */
 //login that bai
+// disable audio
 public class Config {
     // Server
     public int serverControllerSocket = 7777;
